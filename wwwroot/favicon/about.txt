@@ -1,0 +1,6 @@
+This favicon was generated using the following font:
+
+- Font Title: B612 Mono
+- Font Author: Copyright 2012 The B612 Project Authors (https://github.com/polarsys/b612)
+- Font Source: http://fonts.gstatic.com/s/b612mono/v14/kmK6Zq85QVWbN1eW6lJdayv4os9Pv7JGSg.ttf
+- Font License: SIL Open Font License, 1.1 (http://scripts.sil.org/OFL))

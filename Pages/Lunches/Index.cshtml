@@ -1,0 +1,36 @@
+﻿@page
+@model Jopp_lunch.Pages.Lunches.IndexModel
+@{
+}
+<br />
+<h2>Editor Obědů</h2>
+<a class="btn btn-primary btn-sm " href="/Lunches/Create">Přidat</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Forma</th>
+            <th>Popis</th>
+            <th>Datum výdeje</th>
+            <th>Datum přidání</th>
+            <th>ID polévky</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.LunchList)
+        {
+            <tr>
+                <td>@item.cislo_obeda</td>
+                <td>@item.forma_obeda</td>
+                <td>@item.popis_obeda</td>
+                <td>@item.datum_vydeje</td>
+                <td>@item.datum_pridani</td>
+                <td>@item.cislo_polevky</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="/Lunches/Edit?id=">Upravit</a>
+                    <a class="btn btn-danger btn-sm" href="/Lunches/Delete?id=">Smazat</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

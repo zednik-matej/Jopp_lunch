@@ -1,0 +1,56 @@
+﻿@page
+@model Jopp_lunch.Pages.Users.CreateModel
+@{
+}
+
+<br />
+<h2>Nový uživatel</h2>
+
+@if (Model.errorMessage.Length > 0)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>@Model.errorMessage</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Zavřít"></button>
+    </div>
+}
+
+<form method="post">
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Jméno*</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="jmeno" value="@Model.Uzivatel.jmeno" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Příjmení*</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="prijmeni" value="@Model.Uzivatel.prijmeni" />
+        </div>
+    </div>
+
+    @if (Model.successMessage.Length > 0)
+    {
+        <div class="row mb-3">
+            <div class="col-sm-9">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>@Model.successMessage</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-Label="Zavřít"></button>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="row mb-3">
+        <div class="offset-sm-3 col-sm-3 d-grid">
+            <button type="submit" class="btn btn-primary">Vložit</button>
+        </div>
+        <div class="col-sm-3 d-grid">
+            <a class="btn btn-outline-primary" role="button" href="/Users" >Zrušit</a>
+        </div>
+        <br />
+        <small>* povinná pole</small>
+    </div>
+    
+</form>
+    
+

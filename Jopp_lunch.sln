@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jopp_lunch", "Jopp_lunch.csproj", "{E2BC990A-83AD-4A80-8D0E-88EAE5A4A016}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E2BC990A-83AD-4A80-8D0E-88EAE5A4A016}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2BC990A-83AD-4A80-8D0E-88EAE5A4A016}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2BC990A-83AD-4A80-8D0E-88EAE5A4A016}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2BC990A-83AD-4A80-8D0E-88EAE5A4A016}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {39736B36-1F21-46CB-93EC-5D50A1A2F682}
+	EndGlobalSection
+EndGlobal

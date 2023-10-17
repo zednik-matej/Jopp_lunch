@@ -1,0 +1,34 @@
+﻿@page
+@model Jopp_lunch.Pages.Users.IndexModel
+@{
+}
+<br />
+<h2>Správa uživatelů</h2>
+<a class="btn btn-primary btn-sm " href="/Users/Create">Přidat</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Jméno</th>
+            <th>Příjmení</th>
+            <th>Výchozí výdejní místo</th>
+            <th>Výchozí forma výdeje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model.listUzivatels)
+        {
+            <tr>
+                <td>@item.osobni_cislo</td>
+                <td>@item.jmeno</td>
+                <td>@item.prijmeni</td>
+                <td>@item.vychozi_VM</td>
+                <td>@item.vychozi_forma</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="/Users/Edit?osobni_cislo=@item.osobni_cislo">Upravit</a>
+                    <a class="btn btn-danger btn-sm"  href="/Users/Delete?osobni_cislo=@item.osobni_cislo">Smazat</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
