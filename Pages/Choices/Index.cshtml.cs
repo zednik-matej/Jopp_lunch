@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Jopp_lunch.Pages.Lunches
+namespace Jopp_lunch.Pages.Choices
 {
-    public class DeleteModel : PageModel
+    public class IndexModel : PageModel
     {
         public void OnGet()
         {

@@ -12,7 +12,7 @@ namespace Jopp_lunch.Pages.Lunches
 
         public void OnGet()
         {
-            String ID = Request.Query["osobni_cislo"];
+            String ID = Request.Query["cislo_obeda"];
             if (!String.IsNullOrEmpty(ID))
             {
                 try
@@ -21,7 +21,7 @@ namespace Jopp_lunch.Pages.Lunches
                     using (SqlConnection connection = new SqlConnection(connectionstring))
                     {
                         connection.Open();
-                        String query = "Select * from uzivatele where osobni_cislo=@id";
+                        String query = "Select cislo_obeda,cislo_polevky,forma_obeda,popis_obeda,datum_vydeje from obedy where cislo_obeda=@id";
                         using (SqlCommand command = new SqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("id", ID);
@@ -29,11 +29,14 @@ namespace Jopp_lunch.Pages.Lunches
                             {
                                 while (reader.Read())
                                 {
-                                    /*Uzivatel.osobni_cislo = reader.GetInt32(0);
-                                    Uzivatel.jmeno = reader.GetString(1);
-                                    Uzivatel.prijmeni = reader.GetString(2);
-                                    Uzivatel.vychozi_VM = reader.GetInt32(3);
-                                    Uzivatel.vychozi_forma = reader.GetString(4);*/
+                                    obed.cislo_obeda = reader.GetOrdinal("cislo_obeda");
+                                    if (!reader.IsDBNull(reader.GetOrdinal("cislo_polevky")))
+                                    {
+                                        obed.cislo_polevky = reader.GetOrdinal("cislo_polevky");
+                                    }
+                                    obed.forma_obeda = reader.GetString(2);
+                                    obed.popis_obeda = reader.GetString(3);
+                                    obed.datum_vydeje = DateOnly.FromDateTime(reader.GetDateTime(4));
                                 }
                             }
                         }
@@ -53,27 +56,27 @@ namespace Jopp_lunch.Pages.Lunches
                 errorMessage = "forma, popis, datum výdeje jsou povinná pole!";
                 return;
             }
-            /*Uzivatel.osobni_cislo = Int32.Parse(Request.Form["osobni_cislo"]);
-            Uzivatel.jmeno = Request.Form["jmeno"];
-            Uzivatel.prijmeni = Request.Form["prijmeni"];
-            Uzivatel.vychozi_forma = Request.Form["vychozi_forma"];
-            Uzivatel.vychozi_VM = Int32.Parse(Request.Form["vychozi_VM"]);*/
+            obed.cislo_obeda = Int32.Parse(Request.Form["cislo_obeda"]);
+            obed.popis_obeda = Request.Form["popis"];
+            obed.forma_obeda = Request.Form["forma"];
+            obed.cislo_polevky = Int32.Parse(Request.Form["polevka"]);
+            obed.datum_vydeje = DateOnly.Parse(Request.Form["datum_vydeje"]);
             try
             {
                 String connectionstring = "Data Source=(localdb)\\LocalTestDB;Initial Catalog=JoppLunchDB;Integrated Security=True";
                 using (SqlConnection connection = new SqlConnection(connectionstring))
                 {
                     connection.Open();
-                    String query = "UPDATE uzivatele " +
-                        "SET jmeno=@jmeno, prijmeni=@prijmeni, vychozi_VM=@VM, vychozi_forma=@forma WHERE osobni_cislo=@id";
+                    String query = "UPDATE obedy " +
+                        "SET forma_obeda=@forma, datum_vydeje=@vydej, datum_editace= GETDATE(), popis_obeda=@popis, cislo_polevky=@polevka WHERE cislo_obeda=@id";
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                       /* command.Parameters.AddWithValue("@jmeno", Uzivatel.jmeno);
-                        command.Parameters.AddWithValue("@prijmeni", Uzivatel.prijmeni);
-                        command.Parameters.AddWithValue("@VM", Uzivatel.vychozi_VM);
-                        command.Parameters.AddWithValue("@forma", Uzivatel.vychozi_forma);
-                        command.Parameters.AddWithValue("@id", Uzivatel.osobni_cislo);
-                        int cnt = command.ExecuteNonQuery();*/
+                        command.Parameters.AddWithValue("@forma", obed.forma_obeda);
+                        command.Parameters.AddWithValue("@vydej", obed.datum_vydeje.ToString("yyyy-MM-dd"));
+                        command.Parameters.AddWithValue("@popis", obed.popis_obeda);
+                        command.Parameters.AddWithValue("@polevka", obed.cislo_polevky);
+                        command.Parameters.AddWithValue("@id", obed.cislo_obeda);
+                        int cnt = command.ExecuteNonQuery();
                     }
                 }
             }
@@ -85,7 +88,7 @@ namespace Jopp_lunch.Pages.Lunches
 
             obed = new Obed();
             successMessage = "Nový uživatel byl pøidán";
-            Response.Redirect("/Users/Index");
+            Response.Redirect("/Lunches/Index");
         }    
     }
 }

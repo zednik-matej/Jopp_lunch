@@ -3,12 +3,12 @@
 @{
     try
     {
-            String id = Request.Query["osobni_cislo"];
+            String id = Request.Query["cislo_obeda"];
             String connectionstring = "Data Source=(localdb)\\LocalTestDB;Initial Catalog=JoppLunchDB;Integrated Security=True";
             using (SqlConnection connection = new SqlConnection(connectionstring))
             {
                 connection.Open();
-                String query = "DELETE from uzivatele where osobni_cislo=@id";
+                String query = "DELETE from obedy where cislo_obeda=@id";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@id", id);
@@ -21,5 +21,5 @@
     {
         Console.Write(ex);
     }
-    Response.Redirect("/Users/Index");
+    Response.Redirect("/Lunches/Index");
 }

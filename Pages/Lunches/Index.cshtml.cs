@@ -16,7 +16,7 @@ namespace Jopp_lunch.Pages.Lunches
                 using (SqlConnection connection = new SqlConnection(connectionstring))
                 {
                     connection.Open();
-                    String query = "Select * from obedy where datum_vydeje > GETUTCDATE()";
+                    String query = "Select * from obedy/* where datum_vydeje > GETDATE()*/";
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         using (SqlDataReader reader = command.ExecuteReader())

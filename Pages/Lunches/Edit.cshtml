@@ -4,7 +4,7 @@
 }
 
 <br />
-<h2>Upravit uživatele</h2>
+<h2>Upravit Oběd</h2>
 
 @if (Model.errorMessage.Length > 0)
 {
@@ -15,29 +15,29 @@
 }
 
 <form method="post">
-    <input type="hidden" name="osobni_cislo" value="@Model.Uzivatel.osobni_cislo" />
+    <input type="hidden" name="cislo_obeda" value="@Model.obed.cislo_obeda" />
     <div class="row mb-3">
-        <label class="col-sm-3 col-form-label">Jméno*</label>
+        <label class="col-sm-3 col-form-label">Forma Obědu*</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" name="jmeno" value="@Model.Uzivatel.jmeno" />
+            <input type="text" class="form-control" name="forma" value="@Model.obed.forma_obeda" />
         </div>
     </div>
     <div class="row mb-3">
-        <label class="col-sm-3 col-form-label">Příjmení*</label>
+        <label class="col-sm-3 col-form-label">Popis obědu*</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" name="prijmeni" value="@Model.Uzivatel.prijmeni" />
+            <input type="text" class="form-control" name="popis" value="@Model.obed.popis_obeda" />
         </div>
     </div>
     <div class="row mb-3">
-        <label class="col-sm-3 col-form-label">Výchozí výdejní místo</label>
+        <label class="col-sm-3 col-form-label">Datum výdeje*</label>
         <div class="col-sm-6">
-            <input type="number" class="form-control" name="vychozi_VM" value="@Model.Uzivatel.vychozi_VM" />
+            <input type="date" class="form-control" name="datum_vydeje" value="@Model.obed.datum_vydeje.ToString("yyyy-MM-dd")" />
         </div>
     </div>
     <div class="row mb-3">
-        <label class="col-sm-3 col-form-label">Výchozí forma</label>
+        <label class="col-sm-3 col-form-label">ID polévky*</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" name="vychozi_forma" value="@Model.Uzivatel.vychozi_forma" />
+            <input type="number" class="form-control" name="polevka" value="@Model.obed.cislo_polevky" />
         </div>
     </div>
 
