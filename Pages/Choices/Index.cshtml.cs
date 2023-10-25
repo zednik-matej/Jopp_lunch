@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
+using System.Globalization;
 
 namespace Jopp_lunch.Pages.Choices
 {
@@ -7,6 +9,7 @@ namespace Jopp_lunch.Pages.Choices
     {
         public void OnGet()
         {
+            
         }
     }
 }
