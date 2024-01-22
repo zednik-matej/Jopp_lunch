@@ -17,7 +17,7 @@ namespace Jopp_lunch.Pages.Lunches
             {
                 try
                 {
-                    String connectionstring = "Data Source=(localdb)\\LocalTestDB;Initial Catalog=JoppLunchDB;Integrated Security=True";
+                    String connectionstring = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=JoppLunchDB;Integrated Security=True";
                     using (SqlConnection connection = new SqlConnection(connectionstring))
                     {
                         connection.Open();
@@ -63,7 +63,7 @@ namespace Jopp_lunch.Pages.Lunches
             obed.datum_vydeje = DateOnly.Parse(Request.Form["datum_vydeje"]);
             try
             {
-                String connectionstring = "Data Source=(localdb)\\LocalTestDB;Initial Catalog=JoppLunchDB;Integrated Security=True";
+                String connectionstring = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=JoppLunchDB;Integrated Security=True";
                 using (SqlConnection connection = new SqlConnection(connectionstring))
                 {
                     connection.Open();

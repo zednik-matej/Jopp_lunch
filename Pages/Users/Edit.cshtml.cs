@@ -17,7 +17,7 @@ namespace Jopp_lunch.Pages.Users
             {
                 try
                 {
-                    String connectionstring = "Data Source=(localdb)\\LocalTestDB;Initial Catalog=JoppLunchDB;Integrated Security=True";
+                    String connectionstring = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=JoppLunchDB;Integrated Security=True";
                     using (SqlConnection connection = new SqlConnection(connectionstring))
                     {
                         connection.Open();
@@ -60,7 +60,7 @@ namespace Jopp_lunch.Pages.Users
             Uzivatel.vychozi_VM = Int32.Parse(Request.Form["vychozi_VM"]);
             try
             {
-                String connectionstring = "Data Source=(localdb)\\LocalTestDB;Initial Catalog=JoppLunchDB;Integrated Security=True";
+                String connectionstring = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=JoppLunchDB;Integrated Security=True";
                 using (SqlConnection connection = new SqlConnection(connectionstring))
                 {
                     connection.Open();
