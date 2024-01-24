@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Jopp_lunch.Data;
 using Jopp_lunch.Model.DbEntities;
 
-namespace Jopp_lunch.Pages.Lunches
+namespace Jopp_lunch.Pages.Soups
 {
     public class EditModel : PageModel
     {
@@ -21,21 +21,21 @@ namespace Jopp_lunch.Pages.Lunches
         }
 
         [BindProperty]
-        public Lunch Lunch { get; set; } = default!;
+        public Soup Soup { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.obedy == null)
+            if (id == null || _context.polevky == null)
             {
                 return NotFound();
             }
 
-            var lunch =  await _context.obedy.FirstOrDefaultAsync(m => m.cislo_obeda == id);
-            if (lunch == null)
+            var soup =  await _context.polevky.FirstOrDefaultAsync(m => m.polevkaId == id);
+            if (soup == null)
             {
                 return NotFound();
             }
-            Lunch = lunch;
+            Soup = soup;
             return Page();
         }
 
@@ -48,7 +48,7 @@ namespace Jopp_lunch.Pages.Lunches
                 return Page();
             }
 
-            _context.Attach(Lunch).State = EntityState.Modified;
+            _context.Attach(Soup).State = EntityState.Modified;
 
             try
             {
@@ -56,7 +56,7 @@ namespace Jopp_lunch.Pages.Lunches
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!LunchExists(Lunch.cislo_obeda))
+                if (!SoupExists(Soup.polevkaId))
                 {
                     return NotFound();
                 }
@@ -69,9 +69,9 @@ namespace Jopp_lunch.Pages.Lunches
             return RedirectToPage("./Index");
         }
 
-        private bool LunchExists(int id)
+        private bool SoupExists(int id)
         {
-          return (_context.obedy?.Any(e => e.cislo_obeda == id)).GetValueOrDefault();
+          return (_context.polevky?.Any(e => e.polevkaId == id)).GetValueOrDefault();
         }
     }
 }

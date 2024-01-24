@@ -1,5 +1,5 @@
 ﻿@page
-@model Jopp_lunch.Pages.Lunches.DeleteModel
+@model Jopp_lunch.Pages.Soups.DeleteModel
 
 @{
     ViewData["Title"] = "Delete";
@@ -10,43 +10,43 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Lunch</h4>
+    <h4>Soup</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Lunch.forma_obeda)
+            @Html.DisplayNameFor(model => model.Soup.forma_obeda)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Lunch.forma_obeda)
+            @Html.DisplayFor(model => model.Soup.forma_obeda)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Lunch.popis_obeda)
+            @Html.DisplayNameFor(model => model.Soup.popis_obeda)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Lunch.popis_obeda)
+            @Html.DisplayFor(model => model.Soup.popis_obeda)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Lunch.datum_vydeje)
+            @Html.DisplayNameFor(model => model.Soup.datum_vydeje)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Lunch.datum_vydeje)
+            @Html.DisplayFor(model => model.Soup.datum_vydeje)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Lunch.datum_pridani)
+            @Html.DisplayNameFor(model => model.Soup.datum_pridani)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Lunch.datum_pridani)
+            @Html.DisplayFor(model => model.Soup.datum_pridani)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Lunch.datum_editace)
+            @Html.DisplayNameFor(model => model.Soup.datum_editace)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Lunch.datum_editace)
+            @Html.DisplayFor(model => model.Soup.datum_editace)
         </dd>
     </dl>
     
     <form method="post">
-        <input type="hidden" asp-for="Lunch.cislo_obeda" />
+        <input type="hidden" asp-for="Soup.polevkaId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-page="./Index">Back to List</a>
     </form>

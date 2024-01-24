@@ -7,27 +7,25 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Jopp_lunch.Data;
 using Jopp_lunch.Model.DbEntities;
-using Microsoft.AspNetCore.Authorization;
 
-namespace Jopp_lunch.Pages.Users
+namespace Jopp_lunch.Pages.Soups
 {
-    [Authorize(Roles = "admin")]
-    public class UsersModel : PageModel
+    public class IndexModel : PageModel
     {
-        private readonly CanteenContext _context;
+        private readonly Jopp_lunch.Data.CanteenContext _context;
 
-        public UsersModel(CanteenContext context)
+        public IndexModel(Jopp_lunch.Data.CanteenContext context)
         {
             _context = context;
         }
 
-        public IList<User> Users { get; set; } = default!;
+        public IList<Soup> Soup { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            if (_context.uzivatele != null)
+            if (_context.polevky != null)
             {
-                Users = await _context.uzivatele.ToListAsync();
+                Soup = await _context.polevky.ToListAsync();
             }
         }
     }

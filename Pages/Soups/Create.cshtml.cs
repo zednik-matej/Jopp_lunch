@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Jopp_lunch.Data;
 using Jopp_lunch.Model.DbEntities;
 
-namespace Jopp_lunch.Pages.Lunches
+namespace Jopp_lunch.Pages.Soups
 {
     public class CreateModel : PageModel
     {
@@ -25,18 +25,18 @@ namespace Jopp_lunch.Pages.Lunches
         }
 
         [BindProperty]
-        public Lunch Lunch { get; set; } = default!;
+        public Soup Soup { get; set; } = default!;
         
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.obedy == null || Lunch == null)
+          if (!ModelState.IsValid || _context.polevky == null || Soup == null)
             {
                 return Page();
             }
 
-            _context.obedy.Add(Lunch);
+            _context.polevky.Add(Soup);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

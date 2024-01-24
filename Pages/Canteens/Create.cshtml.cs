@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Jopp_lunch.Data;
 using Jopp_lunch.Model.DbEntities;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Jopp_lunch.Pages.Lunches
+namespace Jopp_lunch.Pages.Canteens
 {
+    [Authorize(Roles = "admin")]
     public class CreateModel : PageModel
     {
         private readonly Jopp_lunch.Data.CanteenContext _context;
@@ -25,18 +27,18 @@ namespace Jopp_lunch.Pages.Lunches
         }
 
         [BindProperty]
-        public Lunch Lunch { get; set; } = default!;
+        public Canteen Canteen { get; set; } = default!;
         
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.obedy == null || Lunch == null)
+          if (!ModelState.IsValid || _context.vydejni_mista == null || Canteen == null)
             {
                 return Page();
             }
 
-            _context.obedy.Add(Lunch);
+            _context.vydejni_mista.Add(Canteen);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

@@ -8,9 +8,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Jopp_lunch.Data;
 using Jopp_lunch.Model.DbEntities;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Jopp_lunch.Pages.Lunches
+namespace Jopp_lunch.Pages.Canteens
 {
+    [Authorize(Roles = "admin")]
     public class EditModel : PageModel
     {
         private readonly Jopp_lunch.Data.CanteenContext _context;
@@ -21,21 +23,21 @@ namespace Jopp_lunch.Pages.Lunches
         }
 
         [BindProperty]
-        public Lunch Lunch { get; set; } = default!;
+        public Canteen Canteen { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.obedy == null)
+            if (id == null || _context.vydejni_mista == null)
             {
                 return NotFound();
             }
 
-            var lunch =  await _context.obedy.FirstOrDefaultAsync(m => m.cislo_obeda == id);
-            if (lunch == null)
+            var canteen =  await _context.vydejni_mista.FirstOrDefaultAsync(m => m.cislo_VM == id);
+            if (canteen == null)
             {
                 return NotFound();
             }
-            Lunch = lunch;
+            Canteen = canteen;
             return Page();
         }
 
@@ -48,7 +50,7 @@ namespace Jopp_lunch.Pages.Lunches
                 return Page();
             }
 
-            _context.Attach(Lunch).State = EntityState.Modified;
+            _context.Attach(Canteen).State = EntityState.Modified;
 
             try
             {
@@ -56,7 +58,7 @@ namespace Jopp_lunch.Pages.Lunches
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!LunchExists(Lunch.cislo_obeda))
+                if (!CanteenExists(Canteen.cislo_VM))
                 {
                     return NotFound();
                 }
@@ -69,9 +71,9 @@ namespace Jopp_lunch.Pages.Lunches
             return RedirectToPage("./Index");
         }
 
-        private bool LunchExists(int id)
+        private bool CanteenExists(int id)
         {
-          return (_context.obedy?.Any(e => e.cislo_obeda == id)).GetValueOrDefault();
+          return (_context.vydejni_mista?.Any(e => e.cislo_VM == id)).GetValueOrDefault();
         }
     }
 }

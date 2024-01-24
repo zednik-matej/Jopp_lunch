@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Jopp_lunch.Data;
 using Jopp_lunch.Model.DbEntities;
 
-namespace Jopp_lunch.Pages.Lunches
+namespace Jopp_lunch.Pages.Soups
 {
     public class DeleteModel : PageModel
     {
@@ -20,40 +20,40 @@ namespace Jopp_lunch.Pages.Lunches
         }
 
         [BindProperty]
-      public Lunch Lunch { get; set; } = default!;
+      public Soup Soup { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.obedy == null)
+            if (id == null || _context.polevky == null)
             {
                 return NotFound();
             }
 
-            var lunch = await _context.obedy.FirstOrDefaultAsync(m => m.cislo_obeda == id);
+            var soup = await _context.polevky.FirstOrDefaultAsync(m => m.polevkaId == id);
 
-            if (lunch == null)
+            if (soup == null)
             {
                 return NotFound();
             }
             else 
             {
-                Lunch = lunch;
+                Soup = soup;
             }
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.obedy == null)
+            if (id == null || _context.polevky == null)
             {
                 return NotFound();
             }
-            var lunch = await _context.obedy.FindAsync(id);
+            var soup = await _context.polevky.FindAsync(id);
 
-            if (lunch != null)
+            if (soup != null)
             {
-                Lunch = lunch;
-                _context.obedy.Remove(Lunch);
+                Soup = soup;
+                _context.polevky.Remove(Soup);
                 await _context.SaveChangesAsync();
             }
 

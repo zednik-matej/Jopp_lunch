@@ -10,17 +10,16 @@ using Jopp_lunch.Model.DbEntities;
 
 namespace Jopp_lunch.Pages.Lunches
 {
-    public class DeleteModel : PageModel
+    public class DetailsModel : PageModel
     {
         private readonly Jopp_lunch.Data.CanteenContext _context;
 
-        public DeleteModel(Jopp_lunch.Data.CanteenContext context)
+        public DetailsModel(Jopp_lunch.Data.CanteenContext context)
         {
             _context = context;
         }
 
-        [BindProperty]
-      public Lunch Lunch { get; set; } = default!;
+      public Lunch Lunch { get; set; } = default!; 
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,7 +29,6 @@ namespace Jopp_lunch.Pages.Lunches
             }
 
             var lunch = await _context.obedy.FirstOrDefaultAsync(m => m.cislo_obeda == id);
-
             if (lunch == null)
             {
                 return NotFound();
@@ -40,24 +38,6 @@ namespace Jopp_lunch.Pages.Lunches
                 Lunch = lunch;
             }
             return Page();
-        }
-
-        public async Task<IActionResult> OnPostAsync(int? id)
-        {
-            if (id == null || _context.obedy == null)
-            {
-                return NotFound();
-            }
-            var lunch = await _context.obedy.FindAsync(id);
-
-            if (lunch != null)
-            {
-                Lunch = lunch;
-                _context.obedy.Remove(Lunch);
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToPage("./Index");
         }
     }
 }

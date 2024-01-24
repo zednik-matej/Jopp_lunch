@@ -8,26 +8,28 @@ using Microsoft.EntityFrameworkCore;
 using Jopp_lunch.Data;
 using Jopp_lunch.Model.DbEntities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
-namespace Jopp_lunch.Pages.Users
+namespace Jopp_lunch.Pages.Canteens
 {
     [Authorize(Roles = "admin")]
-    public class UsersModel : PageModel
+    public class IndexModel : PageModel
     {
-        private readonly CanteenContext _context;
 
-        public UsersModel(CanteenContext context)
+        private readonly Jopp_lunch.Data.CanteenContext _context;
+
+        public IndexModel(Jopp_lunch.Data.CanteenContext context)
         {
             _context = context;
         }
 
-        public IList<User> Users { get; set; } = default!;
+        public IList<Canteen> Canteen { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            if (_context.uzivatele != null)
+            if (_context.vydejni_mista != null)
             {
-                Users = await _context.uzivatele.ToListAsync();
+                Canteen = await _context.vydejni_mista.ToListAsync();
             }
         }
     }

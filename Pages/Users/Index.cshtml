@@ -1,34 +1,46 @@
 ﻿@page
-@model Jopp_lunch.Pages.Users.IndexModel
+@model UsersModel
+
 @{
+    ViewData["Title"] = "Users";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
 }
-<br />
-<h2>Správa uživatelů</h2>
-<a class="btn btn-primary btn-sm " href="/Users/Create">Přidat</a>
+
+<h1>Users</h1>
+
 <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Jméno</th>
-            <th>Příjmení</th>
-            <th>Výchozí výdejní místo</th>
-            <th>Výchozí forma výdeje</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users[0].jmeno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users[0].prijmeni)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users[0].osobni_cislo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users[0].Email)
+            </th>
         </tr>
     </thead>
     <tbody>
-        @foreach(var item in Model.listUzivatels)
-        {
-            <tr>
-                <td>@item.osobni_cislo</td>
-                <td>@item.jmeno</td>
-                <td>@item.prijmeni</td>
-                <td>@item.vychozi_VM</td>
-                <td>@item.vychozi_forma</td>
-                <td>
-                    <a class="btn btn-primary btn-sm" href="/Users/Edit?osobni_cislo=@item.osobni_cislo">Upravit</a>
-                    <a class="btn btn-danger btn-sm"  href="/Users/Delete?osobni_cislo=@item.osobni_cislo">Smazat</a>
-                </td>
-            </tr>
-        }
+@foreach (var item in Model.Users) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.jmeno)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.prijmeni)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.osobni_cislo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+        </tr>
+}
     </tbody>
 </table>

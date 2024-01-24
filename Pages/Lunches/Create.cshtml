@@ -1,68 +1,55 @@
 ﻿@page
 @model Jopp_lunch.Pages.Lunches.CreateModel
+
 @{
+    ViewData["Title"] = "Create";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<br />
-<h2>Nový uživatel</h2>
+<h1>Create</h1>
 
-@if (Model.errorMessage.Length > 0)
-{
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <strong>@Model.errorMessage</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Zavřít"></button>
-    </div>
-}
-
-<form method="post">
-    <div class="row mb-3">
-        <label class="col-sm-3 col-form-label">Forma Obědu*</label>
-        <div class="col-sm-6">
-            <input type="text" class="form-control" name="forma" value="@Model.obed.forma_obeda" />
-        </div>
-    </div>
-    <div class="row mb-3">
-        <label class="col-sm-3 col-form-label">Popis obědu*</label>
-        <div class="col-sm-6">
-            <input type="text" class="form-control" name="popis" value="@Model.obed.popis_obeda" />
-        </div>
-    </div>
-    <div class="row mb-3">
-        <label class="col-sm-3 col-form-label">Datum výdeje*</label>
-        <div class="col-sm-6">
-            <input type="date" class="form-control" name="datum_vydeje" value="@Model.obed.datum_vydeje" />
-        </div>
-    </div>
-    <div class="row mb-3">
-        <label class="col-sm-3 col-form-label">ID polévky*</label>
-        <div class="col-sm-6">
-            <input type="number" class="form-control" name="polevka" value="@Model.obed.cislo_polevky" />
-        </div>
-    </div>
-
-    @if (Model.successMessage.Length > 0)
-    {
-        <div class="row mb-3">
-            <div class="col-sm-9">
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>@Model.successMessage</strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-Label="Zavřít"></button>
-                </div>
+<h4>Lunch</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Lunch.forma_obeda" class="control-label"></label>
+                <input asp-for="Lunch.forma_obeda" class="form-control" />
+                <span asp-validation-for="Lunch.forma_obeda" class="text-danger"></span>
             </div>
-        </div>
-    }
-
-    <div class="row mb-3">
-        <div class="offset-sm-3 col-sm-3 d-grid">
-            <button type="submit" class="btn btn-primary">Vložit</button>
-        </div>
-        <div class="col-sm-3 d-grid">
-            <a class="btn btn-outline-primary" role="button" href="/Users" >Zrušit</a>
-        </div>
-        <br />
-        <small>* povinná pole</small>
+            <div class="form-group">
+                <label asp-for="Lunch.popis_obeda" class="control-label"></label>
+                <input asp-for="Lunch.popis_obeda" class="form-control" />
+                <span asp-validation-for="Lunch.popis_obeda" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Lunch.datum_vydeje" class="control-label"></label>
+                <input asp-for="Lunch.datum_vydeje" class="form-control" />
+                <span asp-validation-for="Lunch.datum_vydeje" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Lunch.datum_pridani" class="control-label"></label>
+                <input asp-for="Lunch.datum_pridani" class="form-control" />
+                <span asp-validation-for="Lunch.datum_pridani" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Lunch.datum_editace" class="control-label"></label>
+                <input asp-for="Lunch.datum_editace" class="form-control" />
+                <span asp-validation-for="Lunch.datum_editace" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
     </div>
-    
-</form>
-    
+</div>
 
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

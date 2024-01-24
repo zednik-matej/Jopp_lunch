@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Jopp_lunch.Data;
 using Jopp_lunch.Model.DbEntities;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Jopp_lunch.Pages.Lunches
+namespace Jopp_lunch.Pages.Canteens
 {
+    [Authorize(Roles = "admin")]
     public class DeleteModel : PageModel
     {
         private readonly Jopp_lunch.Data.CanteenContext _context;
@@ -20,40 +22,40 @@ namespace Jopp_lunch.Pages.Lunches
         }
 
         [BindProperty]
-      public Lunch Lunch { get; set; } = default!;
+      public Canteen Canteen { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.obedy == null)
+            if (id == null || _context.vydejni_mista == null)
             {
                 return NotFound();
             }
 
-            var lunch = await _context.obedy.FirstOrDefaultAsync(m => m.cislo_obeda == id);
+            var canteen = await _context.vydejni_mista.FirstOrDefaultAsync(m => m.cislo_VM == id);
 
-            if (lunch == null)
+            if (canteen == null)
             {
                 return NotFound();
             }
             else 
             {
-                Lunch = lunch;
+                Canteen = canteen;
             }
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.obedy == null)
+            if (id == null || _context.vydejni_mista == null)
             {
                 return NotFound();
             }
-            var lunch = await _context.obedy.FindAsync(id);
+            var canteen = await _context.vydejni_mista.FindAsync(id);
 
-            if (lunch != null)
+            if (canteen != null)
             {
-                Lunch = lunch;
-                _context.obedy.Remove(Lunch);
+                Canteen = canteen;
+                _context.vydejni_mista.Remove(Canteen);
                 await _context.SaveChangesAsync();
             }
 
