@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Jopp_lunch.Data;
 using Jopp_lunch.Model.DbEntities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Jopp_lunch.Pages.Lunches
 {
+    [Authorize(Roles = "editor,admin,chef")]
     public class DeleteModel : PageModel
     {
         private readonly Jopp_lunch.Data.CanteenContext _context;
