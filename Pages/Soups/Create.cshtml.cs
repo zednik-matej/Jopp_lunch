@@ -38,6 +38,9 @@ namespace Jopp_lunch.Pages.Soups
                 return Page();
             }
 
+            Soup.datum_pridani = DateTime.Now;
+            Soup.datum_editace = DateTime.Now;
+
             _context.polevky.Add(Soup);
             await _context.SaveChangesAsync();
 

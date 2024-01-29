@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Jopp_lunch.Data;
 using Jopp_lunch.Model.DbEntities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Jopp_lunch.Pages.Lunches
 {
@@ -33,15 +34,26 @@ namespace Jopp_lunch.Pages.Lunches
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.obedy == null || Lunch == null)
+            if (!ModelState.IsValid || _context.obedy == null || _context.polevky == null || Lunch == null)
             {
                 return Page();
             }
+            else
+            {
+                Soup soup = await _context.polevky
+                    .Where(p => p.datum_vydeje.Date == Lunch.datum_vydeje.Date)
+                    .FirstOrDefaultAsync() ?? new Soup();
 
-            _context.obedy.Add(Lunch);
-            await _context.SaveChangesAsync();
+                if(soup.popis_obeda!=null)Lunch.cislo_polevky = soup;
+                else return Page();//Error prvne zalozit polevku!
+                Lunch.datum_pridani = DateTime.Now;
+                Lunch.datum_editace = DateTime.Now;
 
-            return RedirectToPage("./Index");
+                _context.obedy.Add(Lunch);
+                await _context.SaveChangesAsync();
+
+                return RedirectToPage("./Index");
+            }
         }
     }
 }

@@ -2,12 +2,14 @@ using Jopp_lunch.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Jopp_lunch.Model.DbEntities;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddRazorPages();
+
 
 //DefaultConnection = LocalDB, ForpsiDB = forpsi online database
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

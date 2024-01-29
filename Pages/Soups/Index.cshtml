@@ -15,9 +15,6 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Soup[0].forma_obeda)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Soup[0].popis_obeda)
             </th>
             <th>
@@ -35,9 +32,6 @@
     <tbody>
 @foreach (var item in Model.Soup) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.forma_obeda)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.popis_obeda)
             </td>

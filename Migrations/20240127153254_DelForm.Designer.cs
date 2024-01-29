@@ -4,6 +4,7 @@ using Jopp_lunch.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Jopp_lunch.Migrations
 {
     [DbContext(typeof(CanteenContext))]
-    partial class CanteenContextModelSnapshot : ModelSnapshot
+    [Migration("20240127153254_DelForm")]
+    partial class DelForm
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,29 +235,29 @@ namespace Jopp_lunch.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "817cbdea-6e90-4fda-acca-39bded109c62",
-                            ConcurrencyStamp = "4a5796bc-6142-4833-ad4a-d3cbe7d16ca3",
+                            Id = "99c867cb-903d-40c9-a16f-baed337b7052",
+                            ConcurrencyStamp = "5fd72b05-dd71-48c5-95ae-d86a773d474a",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "9622e49a-8085-45f8-b7b7-dd0d9f28ccaa",
-                            ConcurrencyStamp = "f85bfb90-b18d-4c4a-82f5-a0cb709730a9",
+                            Id = "db9919d9-fc9e-4210-b809-2040c15cdd62",
+                            ConcurrencyStamp = "f6502a0c-cdea-4b9f-b4de-9d9316e93954",
                             Name = "editor",
                             NormalizedName = "editor"
                         },
                         new
                         {
-                            Id = "f12f7258-dd57-43e8-bacd-96ca127abb5d",
-                            ConcurrencyStamp = "ea35fd43-c78b-4434-9071-93e991b4962e",
+                            Id = "327d4787-4072-418b-bb87-97c42f172e1a",
+                            ConcurrencyStamp = "6090b364-9ea9-47b8-be89-60f9c6c02c52",
                             Name = "chef",
                             NormalizedName = "chef"
                         },
                         new
                         {
-                            Id = "845c0230-bf16-418b-89ec-94e47e2dda2a",
-                            ConcurrencyStamp = "280ade79-375a-4a5c-be39-0fd7d838a5cc",
+                            Id = "36a946ac-bddd-4d83-a536-6300e114741a",
+                            ConcurrencyStamp = "4888c1b9-cb16-4692-8bf4-9386f038e802",
                             Name = "employee",
                             NormalizedName = "employee"
                         });
