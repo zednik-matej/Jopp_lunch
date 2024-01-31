@@ -1,0 +1,26 @@
+﻿@page
+@model Jopp_lunch.Pages.Choices.DetailModel
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Detail</h1>
+
+<div>
+    <h4>Choice</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Choice.pocet)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Choice.pocet)
+        </dd>
+    </dl>
+</div>
+<div>
+    <!--<a asp-page="./Edit" asp-route-id="@Model.Choice?.cislo_vyberu">Edit</a> -->|
+    <a asp-page="./List">Back to List</a>
+</div>
