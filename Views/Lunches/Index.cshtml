@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Jopp_lunch.Model.DbEntities.Lunch>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.popis_obeda)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.datum_vydeje)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.datum_pridani)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.datum_editace)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.popis_obeda)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.datum_vydeje)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.datum_pridani)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.datum_editace)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.cislo_obeda">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.cislo_obeda">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.cislo_obeda">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</body>
+</html>

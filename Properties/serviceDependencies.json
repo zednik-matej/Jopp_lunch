@@ -2,13 +2,12 @@
   "dependencies": {
     "mssql1": {
       "type": "mssql",
-      "connectionId": "ConnectionStrings:DefaultConnection",
+      "connectionId": "ConnectionStrings:ForpsiDB",
       "dynamicId": null
     },
     "mssql2": {
       "type": "mssql",
-      "connectionId": "ConnectionStrings:ForpsiDB",
-      "dynamicId": null
+      "connectionId": "AzureDB"
     }
   }
 }

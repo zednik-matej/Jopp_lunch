@@ -4,6 +4,7 @@ using Jopp_lunch.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,16 +12,17 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Jopp_lunch.Migrations
 {
     [DbContext(typeof(CanteenContext))]
-    partial class CanteenContextModelSnapshot : ModelSnapshot
+    [Migration("20240214180728_AddForma")]
+    partial class AddForma
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.16")
+                .HasAnnotation("ProductVersion", "6.0.26")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Jopp_lunch.Model.DbEntities.Canteen", b =>
                 {
@@ -28,7 +30,7 @@ namespace Jopp_lunch.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("cislo_VM"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("cislo_VM"), 1L, 1);
 
                     b.Property<string>("nazev")
                         .IsRequired()
@@ -45,7 +47,7 @@ namespace Jopp_lunch.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("cislo_vyberu"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("cislo_vyberu"), 1L, 1);
 
                     b.Property<string>("cislo_uzivateleId")
                         .IsRequired()
@@ -80,7 +82,7 @@ namespace Jopp_lunch.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("cislo_obeda"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("cislo_obeda"), 1L, 1);
 
                     b.Property<int>("cislo_polevkypolevkaId")
                         .HasColumnType("int");
@@ -111,7 +113,7 @@ namespace Jopp_lunch.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("polevkaId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("polevkaId"), 1L, 1);
 
                     b.Property<DateTime>("datum_editace")
                         .HasColumnType("datetime2");
@@ -236,25 +238,29 @@ namespace Jopp_lunch.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a0ea6d69-7679-44d1-b1ed-1dd972640afc",
+                            Id = "5be56830-3ba9-45d1-841c-33c180e9629a",
+                            ConcurrencyStamp = "4741c691-ee9c-474a-98be-ce77f3ef5775",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "54072260-54b6-48c6-8ca9-6694f686b048",
+                            Id = "c57940b5-b01b-4ca8-9758-1f506bed92de",
+                            ConcurrencyStamp = "0ebd8a81-9f8a-499a-8365-dd75ba79a533",
                             Name = "editor",
                             NormalizedName = "editor"
                         },
                         new
                         {
-                            Id = "605a23b2-f661-446e-a9bc-17335b53ec2c",
+                            Id = "8451cc32-5246-45e5-89f9-5ec9bb70cb95",
+                            ConcurrencyStamp = "49219ca3-cf23-403f-b3e9-53671e11eede",
                             Name = "chef",
                             NormalizedName = "chef"
                         },
                         new
                         {
-                            Id = "ab77b417-f5b6-496d-bf09-49a7946e0e87",
+                            Id = "06b0096a-c509-46ba-8920-58c5341e3da7",
+                            ConcurrencyStamp = "76999254-b221-4364-b04d-d22e6804f6b4",
                             Name = "employee",
                             NormalizedName = "employee"
                         });
@@ -266,7 +272,7 @@ namespace Jopp_lunch.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -291,7 +297,7 @@ namespace Jopp_lunch.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
