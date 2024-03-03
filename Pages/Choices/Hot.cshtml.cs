@@ -34,9 +34,9 @@ namespace Jopp_lunch.Pages.Choices
                 startOfWeek = DateTime.Today.AddDays(3);
                 return;
             }
-            if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+            else if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
             {
-                startOfWeek = DateTime.Today.AddDays(3);
+                startOfWeek = DateTime.Today.AddDays(2);
                 return;
             }
             if (DateTime.Now.Hour >= 12) 
@@ -99,6 +99,7 @@ namespace Jopp_lunch.Pages.Choices
                             choice.cislo_uzivatele = _context.uzivatele.Where(x => x.Id == _userManager.GetUserId(HttpContext.User)).FirstOrDefault() ?? new User();
                             choice.vydejni_misto = _context.vydejni_mista.Where(x => x.cislo_VM == 1).FirstOrDefault() ?? new Canteen();
                             choice.obedId = lnch;
+                            choice.forma = 0;//0-hot,1-packed/cold
                             _context.vybery.Add(choice);
                             _context.SaveChanges();
                         }
