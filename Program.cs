@@ -12,11 +12,19 @@ builder.Services.AddRazorPages();
 
 
 //DefaultConnection = LocalDB, ForpsiDB = forpsi online database
-var connectionString = builder.Configuration.GetConnectionString("ForpsiDB");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<CanteenContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddDefaultIdentity<User>(options => 
+{
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredLength = 6;
+})
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<CanteenContext>();
 //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
