@@ -79,13 +79,15 @@ namespace Jopp_lunch.Pages.Choices
         }
 
         public IActionResult OnGetAddLunch(int id)
-        {
-            if (_context.vybery != null && _context.obedy != null) {
-                Lunch lnch = _context.obedy.Where(ob => ob.cislo_obeda==id).FirstOrDefault() ?? new Lunch();
-                if (lnch != null)
+        {          
+            if (_context.vybery != null && _context.obedy != null && _context.uzivatele != null)
+            {
+                Lunch lnch = _context.obedy.Where(ob => ob.cislo_obeda == id).FirstOrDefault() ?? new Lunch();
+                if (lnch.cislo_obeda != 0)
                 {
-                    Choice choice = _context.vybery.Where(x => x.obedId == lnch).FirstOrDefault() ?? new Choice();
-                    if (choice.cislo_vyberu!=0)
+                    User thisUsr = _context.uzivatele.Where(x => x.Id == _userManager.GetUserId(HttpContext.User)).FirstOrDefault() ?? new User();
+                    Choice choice = _context.vybery.Where(x => x.obedId == lnch &&  x.cislo_uzivatele == thisUsr).FirstOrDefault() ?? new Choice();
+                    if (choice.cislo_vyberu != 0)
                     {
                         choice.pocet = choice.pocet + 1;
                         _context.vybery.Update(choice);
@@ -93,10 +95,10 @@ namespace Jopp_lunch.Pages.Choices
                     }
                     else
                     {
-                        if (_context.uzivatele != null && _context.vydejni_mista!=null)
+                        if (_context.vydejni_mista != null)
                         {
                             choice.pocet += 1;
-                            choice.cislo_uzivatele = _context.uzivatele.Where(x => x.Id == _userManager.GetUserId(HttpContext.User)).FirstOrDefault() ?? new User();
+                            choice.cislo_uzivatele = thisUsr;
                             choice.vydejni_misto = _context.vydejni_mista.Where(x => x.cislo_VM == 1).FirstOrDefault() ?? new Canteen();
                             choice.obedId = lnch;
                             choice.forma = 0;//0-hot,1-packed/cold
@@ -108,6 +110,7 @@ namespace Jopp_lunch.Pages.Choices
             }
             LoadDays();
             LoadLunches();
+            Console.Out.WriteLine("Some log entry");
             return Page();
         }
 

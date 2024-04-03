@@ -1,5 +1,3 @@
-Ôªø// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
 using System;
@@ -20,22 +18,22 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
-namespace Jopp_lunch.Areas.Identity.Pages.Account
+namespace Jopp_lunch.Pages.Users
 {
-    public class RegisterModel : PageModel
+    public class CreateModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly IUserStore<User> _userStore;
         private readonly IUserEmailStore<User> _emailStore;
-        private readonly ILogger<RegisterModel> _logger;
+        private readonly ILogger<CreateModel> _logger;
         private readonly IEmailSender _emailSender;
 
-        public RegisterModel(
+        public CreateModel(
             UserManager<User> userManager,
             IUserStore<User> userStore,
             SignInManager<User> signInManager,
-            ILogger<RegisterModel> logger,
+            ILogger<CreateModel> logger,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -78,11 +76,11 @@ namespace Jopp_lunch.Areas.Identity.Pages.Account
             /// 
 
             [Required]
-            [Display(Name = "Jm√©no")]
+            [Display(Name = "JmÈno")]
             public string jmeno { get; set; }
 
             [Required]
-            [Display(Name = "P≈ô√≠jmen√≠")]
+            [Display(Name = "P¯ÌjmenÌ")]
             public string prijmeni { get; set; }
 
             [EmailAddress]
@@ -90,7 +88,7 @@ namespace Jopp_lunch.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            [Display(Name = "Osobn√≠ ƒç√≠slo")]
+            [Display(Name = "OsobnÌ ËÌslo")]
             public int osobni_cislo { get; set; }
 
             /// <summary>
@@ -132,7 +130,7 @@ namespace Jopp_lunch.Areas.Identity.Pages.Account
                     prijmeni = Input.prijmeni,
                     UserName = Input.osobni_cislo.ToString(),
                     Email = Input.Email
-                } ;
+                };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
@@ -143,27 +141,8 @@ namespace Jopp_lunch.Areas.Identity.Pages.Account
                     //set user role
                     await _userManager.AddToRoleAsync(user, "employee");
 
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
+                    return RedirectToPage("./Index");
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
                 }
                 foreach (var error in result.Errors)
                 {

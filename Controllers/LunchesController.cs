@@ -67,6 +67,7 @@ namespace Jopp_lunch.Controllers
             var reader = new StringReader(text);
             string datum_vydeje="";
             string lastline = "";
+            string prelastline = "";
             DateTime issueDate = DateTime.Now;
             int err;
             for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
@@ -74,21 +75,33 @@ namespace Jopp_lunch.Controllers
                 if (line.Contains("pondělí") || line.Contains("úterý") || line.Contains("středa") || line.Contains("čtvrtek") || line.Contains("pátek"))
                 {
                     datum_vydeje = line.Substring(8);
-                    datum_vydeje += "2024";
+                    datum_vydeje += DateTime.Now.Year.ToString();
                     issueDate = DateTime.Parse(datum_vydeje);
                 }
-                if (!String.IsNullOrEmpty(datum_vydeje)&& !String.IsNullOrEmpty(line))
+                if (!String.IsNullOrEmpty(datum_vydeje)&& !String.IsNullOrEmpty(line)&& line.Length>3)
                 {
                     if (line[0] == '1')
                     {
                         err = AddSoups(lastline, issueDate);
+                        if (err != 0) continue;
                         err = AddLunch(line.Substring(3), issueDate);
-                        if (err != 0) return -1;
+                        if (err != 0) continue;
                     }
-                     if(line[0] == '2' || line[0] == '3' || line[0] == '4')
+                     if(line[0] == '2')
                     {
                         err = AddLunch(line.Substring(3), issueDate);
-                        if (err != 0) return -1;
+                        if (err != 0) continue;
+                    }
+                    if (line[0] == '3')
+                    {
+                        prelastline = line.Substring(3);
+                    }
+                    if(line[0] == '4')
+                    {
+                        err = AddLunch(prelastline+lastline, issueDate);
+                        if (err != 0) continue;
+                        err = AddLunch(line.Substring(3), issueDate);
+                        if (err != 0) continue;
                     }
                     lastline = line;
                 }

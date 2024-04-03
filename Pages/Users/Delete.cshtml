@@ -1,0 +1,46 @@
+﻿@page
+@model Jopp_lunch.Pages.Users.DeleteModel
+@{
+    ViewData["Title"] = "Smazat";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Smazat</h1>
+
+<h3>Skutečně chcete smazat tohoto uživatele?</h3>
+<div>
+    <h4>Uživatel</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ThisUser.osobni_cislo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ThisUser.osobni_cislo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ThisUser.jmeno)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ThisUser.jmeno)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ThisUser.prijmeni)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ThisUser.prijmeni)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ThisUser.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ThisUser.Email)
+        </dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="ThisUser.osobni_cislo" />
+        <input type="submit" value="Smazat" class="btn btn-danger" /> |
+        <a asp-page="./Index">Zpátky na seznam</a>
+    </form>
+</div>

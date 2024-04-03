@@ -2,4 +2,10 @@
 @model Jopp_lunch.Pages.Lunches.AddModel
 @{
 }
-<a asp-page-handler="ParseText" class="btn btn-xs btn-outline-secondary">Nahrát</a>
+
+<form class="form-horizontal" id="myForm" method="post" name="input">
+    <div class="form-group">
+        <textarea  rows="30" cols="120" style="max-width:100%;" name="textAnswer" id="textAnswer"></textarea>
+        <input type="submit" value="Nahrát" class="btn btn-primary" />
+    </div>
+</form>

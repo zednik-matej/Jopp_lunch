@@ -6,8 +6,10 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Users</h1>
-
+<h1>Uživatelé</h1>
+<p>
+    <a asp-page="Create">Zaregistrovat nového uživatele</a>
+</p>
 <table class="table">
     <thead>
         <tr>
@@ -16,6 +18,12 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Users[0].prijmeni)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users[0].UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users[0].PhoneNumber)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Users[0].osobni_cislo)
@@ -35,10 +43,20 @@
                 @Html.DisplayFor(modelItem => item.prijmeni)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.osobni_cislo)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                <a asp-page="./EditRole" asp-route-id="@item.osobni_cislo">Upravit</a> |
+                <a asp-page="./Delete" asp-route-id="@item.osobni_cislo">Smazat</a>
             </td>
         </tr>
 }
