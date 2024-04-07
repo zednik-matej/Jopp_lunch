@@ -12,7 +12,7 @@ builder.Services.AddRazorPages();
 
 
 //DefaultConnection = Local DataBase name, ForpsiDB = forpsi online database
-var connectionString = builder.Configuration.GetConnectionString("ForpsiDB");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<CanteenContext>(options =>
     options.UseSqlServer(connectionString));
 

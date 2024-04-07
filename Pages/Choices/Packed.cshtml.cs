@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace Jopp_lunch.Pages.Choices
 {
-    public class HotModel : PageModel
+    public class PackedModel : PageModel
     {
         private readonly Jopp_lunch.Data.CanteenContext _context;
 
@@ -21,7 +21,7 @@ namespace Jopp_lunch.Pages.Choices
         public IList<Lunch> Lunch { get; set; } = default!;
         public IList<Choice> Choices { get; set; } = default!;
 
-        public HotModel(Jopp_lunch.Data.CanteenContext context, UserManager<User> userManager)
+        public PackedModel(Jopp_lunch.Data.CanteenContext context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -31,20 +31,20 @@ namespace Jopp_lunch.Pages.Choices
         {
             if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
             {
-                startOfWeek = DateTime.Today.AddDays(3);
+                startOfWeek = DateTime.Today.AddDays(4);
                 return;
             }
             else if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
             {
-                startOfWeek = DateTime.Today.AddDays(2);
+                startOfWeek = DateTime.Today.AddDays(3);
                 return;
             }
             if (DateTime.Now.Hour >= 12) 
             { 
-                if(DateTime.Now.DayOfWeek == DayOfWeek.Friday) { startOfWeek = DateTime.Today.AddDays(4); }
-                else startOfWeek = DateTime.Today.AddDays(2); 
+                if(DateTime.Now.DayOfWeek == DayOfWeek.Friday) { startOfWeek = DateTime.Today.AddDays(5); }
+                else startOfWeek = DateTime.Today.AddDays(3); 
             }
-            else startOfWeek = DateTime.Today.AddDays(1);
+            else startOfWeek = DateTime.Today.AddDays(2);
         }
 
         private void LoadLunches()
@@ -66,7 +66,7 @@ namespace Jopp_lunch.Pages.Choices
                 {
                     User usr = _context.uzivatele.Where(x => x.Id == _userManager.GetUserId(HttpContext.User)).FirstOrDefault() ?? new User();
                     Choices = _context.vybery
-                        .Where(x => Lunch.Contains(x.obedId) && x.cislo_uzivatele == usr && x.forma == 0 /*&& x.datum_vydeje.Date <= endOfWeek.Date*/)
+                        .Where(x => Lunch.Contains(x.obedId) && x.cislo_uzivatele == usr && x.forma==1 /*&& x.datum_vydeje.Date <= endOfWeek.Date*/)
                         .ToList();
                 }
             }
@@ -86,7 +86,7 @@ namespace Jopp_lunch.Pages.Choices
                 if (lnch.cislo_obeda != 0)
                 {
                     User thisUsr = _context.uzivatele.Where(x => x.Id == _userManager.GetUserId(HttpContext.User)).FirstOrDefault() ?? new User();
-                    Choice choice = _context.vybery.Where(x => x.obedId == lnch &&  x.cislo_uzivatele == thisUsr && x.forma == 0).FirstOrDefault() ?? new Choice();
+                    Choice choice = _context.vybery.Where(x => x.obedId == lnch &&  x.cislo_uzivatele == thisUsr && x.forma == 1).FirstOrDefault() ?? new Choice();
                     if (choice.cislo_vyberu != 0)
                     {
                         choice.pocet = choice.pocet + 1;
@@ -101,7 +101,7 @@ namespace Jopp_lunch.Pages.Choices
                             choice.cislo_uzivatele = thisUsr;
                             choice.vydejni_misto = _context.vydejni_mista.Where(x => x.cislo_VM == 1).FirstOrDefault() ?? new Canteen();
                             choice.obedId = lnch;
-                            choice.forma = 0;//0-hot,1-packed/cold
+                            choice.forma = 1;//0-hot,1-packed/cold
                             _context.vybery.Add(choice);
                             _context.SaveChanges();
                         }
@@ -121,7 +121,7 @@ namespace Jopp_lunch.Pages.Choices
                 Lunch lnch = _context.obedy.Where(ob => ob.cislo_obeda == id).FirstOrDefault() ?? new Lunch();
                 if (lnch != null)
                 {
-                    Choice choice = _context.vybery.Where(x => x.obedId == lnch && x.forma == 0).FirstOrDefault() ?? new Choice();
+                    Choice choice = _context.vybery.Where(x => x.obedId == lnch && x.forma == 1).FirstOrDefault() ?? new Choice();
                     if (choice != null && choice.pocet>0)
                     {
                         choice.pocet--;
