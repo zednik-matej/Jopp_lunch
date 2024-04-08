@@ -12,6 +12,15 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Choice[0].cislo_uzivatele)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Choice[0].cislo_vyberu)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Choice[0].obedId)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Choice[0].pocet)
             </th>
             <th></th>
@@ -20,6 +29,15 @@
     <tbody>
 @foreach (var item in Model.Choice) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.cislo_uzivatele.osobni_cislo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.cislo_vyberu)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.obedId.cislo_obeda)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.pocet)
             </td>
