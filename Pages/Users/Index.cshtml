@@ -5,12 +5,14 @@
     ViewData["Title"] = "Users";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
-
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.4/css/dataTables.dataTables.css" />
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.datatables.net/2.0.4/js/dataTables.js"></script>
 <h1>Uživatelé</h1>
 <p>
     <a asp-page="Create">Zaregistrovat nového uživatele</a>
 </p>
-<table class="table">
+<table id="users" class="display">
     <thead>
         <tr>
             <th>
@@ -30,6 +32,12 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Users[0].Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users[0].vychozi_VM)
+            </th>
+            <th>
+                Funkce
             </th>
         </tr>
     </thead>
@@ -55,6 +63,9 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.vychozi_VM.nazev)
+            </td>
+            <td>
                 <a asp-page="./EditRole" asp-route-id="@item.osobni_cislo">Upravit</a> |
                 <a asp-page="./Delete" asp-route-id="@item.osobni_cislo">Smazat</a>
             </td>
@@ -62,3 +73,39 @@
 }
     </tbody>
 </table>
+
+<script type="text/javascript">
+    new DataTable('#users', {
+        language: {
+            url: '//cdn.datatables.net/plug-ins/2.0.4/i18n/cs.json',
+        },
+        initComplete: function () {
+            this.api()
+                .columns()
+                .every(function () {
+                    let column = this;
+
+                    // Create select element
+                    let select = document.createElement('select');
+                    select.add(new Option(''));
+                    column.footer().replaceChildren(select);
+
+                    // Apply listener for user change in value
+                    select.addEventListener('change', function () {
+                        column
+                            .search(select.value, { exact: true })
+                            .draw();
+                    });
+
+                    // Add list of options
+                    column
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function (d, j) {
+                            select.add(new Option(d));
+                        });
+                });
+        }
+    });
+</script>

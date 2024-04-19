@@ -4,6 +4,7 @@ using Jopp_lunch.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Jopp_lunch.Migrations
 {
     [DbContext(typeof(CanteenContext))]
-    partial class CanteenContextModelSnapshot : ModelSnapshot
+    [Migration("20240417172859_AddDefaultVM")]
+    partial class AddDefaultVM
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -241,25 +244,25 @@ namespace Jopp_lunch.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c38fef13-38a9-428b-8a5d-5dc6f8098b14",
+                            Id = "d57b7c9f-8fbb-4f81-92a7-4bf27b2833fa",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "39cf23f1-7b20-4771-898c-53776b1578d2",
+                            Id = "dd2b152c-297b-4e2a-8f2c-f5df1b7688f5",
                             Name = "editor",
                             NormalizedName = "editor"
                         },
                         new
                         {
-                            Id = "e361c785-5309-4bd1-90ef-856e22dff343",
+                            Id = "d9415606-d4ee-4a0c-af5a-c512b88e2ab6",
                             Name = "chef",
                             NormalizedName = "chef"
                         },
                         new
                         {
-                            Id = "64611ccc-e465-4301-94c9-50eec52d1e41",
+                            Id = "4f3290a0-89e7-498b-8a8f-3e74e238c39e",
                             Name = "employee",
                             NormalizedName = "employee"
                         });

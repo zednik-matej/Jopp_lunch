@@ -15,8 +15,14 @@
             <input type="hidden" asp-for="ThisUsr.osobni_cislo" />
             <div class="form-group">
                 <label asp-for="ThisUsr.osobni_cislo" class="control-label"></label>
-                <input asp-for="ThisUsr.osobni_cislo" class="form-control"  readonly/>
+                <input asp-for="ThisUsr.osobni_cislo" class="form-control" readonly />
                 <span asp-validation-for="ThisUsr.osobni_cislo" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="ThisUsr.UserName" />
+            <div class="form-group">
+                <label asp-for="ThisUsr.UserName" class="control-label"></label>
+                <input asp-for="ThisUsr.UserName" class="form-control" readonly />
+                <span asp-validation-for="ThisUsr.UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ThisUsr.jmeno" class="control-label"></label>
@@ -32,6 +38,12 @@
                 <label asp-for="ThisUsr.Email" class="control-label"></label>
                 <input asp-for="ThisUsr.Email" class="form-control" />
                 <span asp-validation-for="ThisUsr.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label"> 1-Jopp VM, 2-Jopp Třebíč</label>
+                <label asp-for="ThisUsr.vychozi_VM.cislo_VM" class="control-label"></label>
+                <input asp-for="ThisUsr.vychozi_VM.cislo_VM" class="form-control" />
+                <span asp-validation-for="ThisUsr.vychozi_VM.cislo_VM" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

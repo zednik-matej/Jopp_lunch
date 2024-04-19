@@ -3,13 +3,28 @@
 @model Jopp_lunch.Pages.Choices.HotModel
 @{
 }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        if (localStorage.getItem("my_app_name_here-quote-scroll") != null) {
+            $(window).scrollTop(localStorage.getItem("my_app_name_here-quote-scroll"));
+        }
+
+        $(window).on("scroll", function () {
+            localStorage.setItem("my_app_name_here-quote-scroll", $(window).scrollTop());
+        });
+
+    });
+</script>
 <div class="text-left">
     <div class="row justify-content-left">
         <h1 style="font-weight: bold;" class="display-4">Týdenní menu</h1>
        @foreach (var sps in Model.Soup){
         <div class="card" style="">
             <div class="card-header">
-                    <h2>@sps.datum_vydeje.ToString("dddd dd.MM.yyyy").ToUpper()</h2>
+                    <h2>@sps.datum_vydeje.ToString("dddd dd.MM.yyyy").ToUpper() <a asp-page-handler="ZmenaVM" asp-route-vm="@Model._VydejniMista.Where(x => x.datum_vydeje.Date == @sps.datum_vydeje.Date).FirstOrDefault().Canteen" asp-route-id="@sps.datum_vydeje.ToString("dd.MM.yyyy")" class="btn btn-primary">@Model._VydejniMista.Where(x => x.datum_vydeje.Date == @sps.datum_vydeje.Date).FirstOrDefault().Canteen</a></h2>
             </div>
             <ul class="list-group list-group-flush">
                     <li class="list-group-item">@Html.DisplayFor(modelItem => sps.popis_obeda)</li>
@@ -41,18 +56,3 @@
        }
     </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-<script type="text/javascript">
-$(document).ready(function () {
-
-    if (localStorage.getItem("my_app_name_here-quote-scroll") != null) {
-        $(window).scrollTop(localStorage.getItem("my_app_name_here-quote-scroll"));
-    }
-
-    $(window).on("scroll", function() {
-        localStorage.setItem("my_app_name_here-quote-scroll", $(window).scrollTop());
-    });
-
-  });
-</script>

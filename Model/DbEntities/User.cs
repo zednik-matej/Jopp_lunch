@@ -13,5 +13,7 @@ namespace Jopp_lunch.Model.DbEntities
         public string jmeno { get; set; } = string.Empty;
         [DisplayName("Příjmení")]
         public string prijmeni { get; set; } = string.Empty;
+        [DisplayName("Výchozí výdejní místo")]
+        public Canteen? vychozi_VM { get; set; } = new Canteen();
     }
 }

@@ -22,12 +22,11 @@ namespace Jopp_lunch.Pages.Users
 
         public async Task<IActionResult> OnGetAsync(string? id)
         {
-            if (id == null || _context.uzivatele == null)
+            if (id == null || _context.uzivatele == null ||_context.vydejni_mista == null)
             {
                 return NotFound();
             }
-            //var usr = await _userManager.FindByIdAsync(id);
-            var usr = await _context.uzivatele.Where(x=> x.UserName==id).FirstOrDefaultAsync();
+            var usr = await _userManager.FindByNameAsync(id);
             if (usr == null)
             {
                 return NotFound();
@@ -40,22 +39,22 @@ namespace Jopp_lunch.Pages.Users
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid || _context.uzivatele==null)
+            if (!ModelState.IsValid || _context.uzivatele==null || _context.vydejni_mista == null)
             {
                 return Page();
             }
-
-            //_userManager.Attach(ThisUsr).State = EntityState.Modified;
             //User usr = await _context.uzivatele.FirstOrDefaultAsync(m => m.osobni_cislo == ThisUsr.osobni_cislo) ?? new User();
-            _context.uzivatele.Update(ThisUsr);
-
+            if (ThisUsr.vychozi_VM != null)
+            {
+                ThisUsr.vychozi_VM = _context.vydejni_mista.Where(x => x.cislo_VM == ThisUsr.vychozi_VM.cislo_VM).FirstOrDefault();
+            }
             try
             {
-                await _context.SaveChangesAsync();
+                await _userManager.UpdateAsync(ThisUsr);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(ThisUsr.UserName))
+                if (ThisUsr.UserName==null || await _userManager.FindByNameAsync(ThisUsr.UserName) == null)
                 {
                     return NotFound();
                 }
@@ -66,11 +65,6 @@ namespace Jopp_lunch.Pages.Users
             }
 
             return RedirectToPage("./Index");
-        }
-
-        private bool UserExists(string id)
-        {
-            return (_context.uzivatele?.Any(e => e.UserName == id)).GetValueOrDefault();
         }
     }
 }

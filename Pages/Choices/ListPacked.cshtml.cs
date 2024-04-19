@@ -11,7 +11,7 @@ using SQLitePCL;
 
 namespace Jopp_lunch.Pages.Choices
 {
-    public class ListModel : PageModel
+    public class ListPackedModel : PageModel
     {
         public class Vyb
         {
@@ -19,7 +19,7 @@ namespace Jopp_lunch.Pages.Choices
             public string? jmeno;
             public string? prijmeni;
             public int celkem;
-            public string? m1, m2, m3, m4, mb1, mb2, mb3, mb4;
+            public string? mb1, mb2, mb3, mb4;
 
         }
 
@@ -67,26 +67,14 @@ namespace Jopp_lunch.Pages.Choices
                     jmeno = usr.jmeno;
                     prijmeni = usr.prijmeni;
                     int celkem = 0;
-                    int m1 = 0, m2 = 0, m3 = 0, m4 = 0, mb1 = 0, mb2 = 0, mb3 = 0, mb4 = 0;
-                    foreach(var item in Choice.Where(x=>x.obedId.datum_vydeje.Date == dt.Date && x.cislo_uzivatele == usr).ToList())
+                    int mb1 = 0, mb2 = 0, mb3 = 0, mb4 = 0;
+                    foreach(var item in Choice.Where(x=>x.obedId.datum_vydeje.Date == dt.Date && x.cislo_uzivatele == usr && x.forma==1).ToList())
                     {
                         celkem+=item.pocet;
-                        if (item.forma == 0)
-                        {
-                            // tepla
-                            if (id_m1 == item.obedId.cislo_obeda) m1=item.pocet;
-                            else if (id_m2 == item.obedId.cislo_obeda) m2= item.pocet;
-                            else if (id_m3 == item.obedId.cislo_obeda) m3= item.pocet;
-                            else if (id_m4 == item.obedId.cislo_obeda) m4= item.pocet;
-                        }
-                        else
-                        {
-                            // balena
-                            if (id_m1 == item.obedId.cislo_obeda) mb1 = item.pocet;
-                            else if (id_m2 == item.obedId.cislo_obeda) mb2 = item.pocet;
-                            else if (id_m3 == item.obedId.cislo_obeda) mb3 = item.pocet;
-                            else if (id_m4 == item.obedId.cislo_obeda) mb4 = item.pocet;
-                        }
+                        if (id_m1 == item.obedId.cislo_obeda) mb1=item.pocet;
+                        else if (id_m2 == item.obedId.cislo_obeda) mb2= item.pocet;
+                        else if (id_m3 == item.obedId.cislo_obeda) mb3= item.pocet;
+                        else if (id_m4 == item.obedId.cislo_obeda) mb4= item.pocet;
                     }
                     if (celkem > 0)
                     {
@@ -95,10 +83,6 @@ namespace Jopp_lunch.Pages.Choices
                         vyber.jmeno = jmeno;
                         vyber.prijmeni = prijmeni;
                         vyber.celkem = celkem;
-                        vyber.m1 = "M1:"+m1.ToString();
-                        vyber.m2 = "M2:" + m2.ToString();
-                        vyber.m3 = "M3:" + m3.ToString();
-                        vyber.m4 = "M4:" + m4.ToString();
                         vyber.mb1 = "MB1:" + mb1.ToString();
                         vyber.mb2 = "MB2:" + mb2.ToString();
                         vyber.mb3 = "MB3:" + mb3.ToString();
@@ -109,7 +93,7 @@ namespace Jopp_lunch.Pages.Choices
             }
         }
 
-        public ListModel(Jopp_lunch.Data.CanteenContext context)
+        public ListPackedModel(Jopp_lunch.Data.CanteenContext context)
         {
             _context = context;
             LoadVybery(DateTime.Now);

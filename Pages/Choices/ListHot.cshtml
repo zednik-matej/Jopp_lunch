@@ -1,15 +1,18 @@
 ﻿@page
-@model Jopp_lunch.Pages.Choices.ListModel
+@model Jopp_lunch.Pages.Choices.ListHotModel
 
 @{
-    ViewData["Title"] = "List";
+    ViewData["Title"] = "List-Hot";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.4/css/dataTables.dataTables.css"/>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.datatables.net/2.0.4/js/dataTables.js"></script>
-<h1>List</h1>
+<h1>Seznam výběrů</h1>
 
+<a href="#" class="btn btn-warning" id="print" onclick="printContent('Printit')">Tisk</a>
+
+<div class="container" id="Printit">
 <table id="vybery" class="display">
     <thead>
         <tr>
@@ -21,10 +24,6 @@
             <th>M2</th>
             <th>M3</th>
             <th>M4</th>
-            <th>MB1</th>
-            <th>MB2</th>
-            <th>MB3</th>
-            <th>MB4</th>
         </tr>
     </thead>
     <tbody>
@@ -54,25 +53,21 @@
             <td>
                 @Html.DisplayFor(modelItem => item.m4)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.mb1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.mb2)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.mb3)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.mb4)
-            </td>
         </tr>
 }
     </tbody>
 </table>
-
+</div>
 
 <script type="text/javascript">
+    function printContent(el) {
+        var restorepage = document.body.innerHTML;
+        var printcontent = document.getElementById(el).innerHTML;
+        document.body.innerHTML = printcontent;
+        window.print();
+        document.body.innerHTML = restorepage;
+    }
+
 new DataTable('#vybery', {
         language: {
             url: '//cdn.datatables.net/plug-ins/2.0.4/i18n/cs.json',
