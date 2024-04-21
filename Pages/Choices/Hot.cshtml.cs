@@ -43,11 +43,6 @@ namespace Jopp_lunch.Pages.Choices
             _VydejniMista = new List<DatumVD>();
         }
 
-        private void setVMLunches(DateTime datum_vydeje)
-        {
-
-        }
-
         private void LoadDays()
         {
             if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
@@ -83,9 +78,9 @@ namespace Jopp_lunch.Pages.Choices
                     _context.obedy.Load();
                     _context.polevky.Load();
                     string canteen = "";
-                    if (_context.vybery.Where(x => x.obedId.cislo_polevky == Sp).FirstOrDefault() != null)
+                    if (_context.vybery.Where(x => x.obedId.cislo_polevky == Sp && x.forma == 0).FirstOrDefault() != null)
                     {
-                        canteen = _context.vybery.Where(x => x.obedId.cislo_polevky == Sp).FirstOrDefault().vydejni_misto.nazev;
+                        canteen = _context.vybery.Where(x => x.obedId.cislo_polevky == Sp && x.forma == 0).FirstOrDefault().vydejni_misto.nazev;
                     }
                     if (canteen.IsNullOrEmpty()) canteen = "Velké Meziøíèí";//TO DO: vychozi VM z uzivatele
                     DatumVD dvd = new DatumVD(Sp.datum_vydeje, canteen);
@@ -109,9 +104,9 @@ namespace Jopp_lunch.Pages.Choices
                             .ForEach(item => item.vydejni_misto=_context.vydejni_mista
                                     .Where(vm=>vm.nazev!= canteen_name)
                                     .FirstOrDefault());
-                        if (_context.vybery.Where(x => x.cislo_uzivatele == usr && x.obedId.datum_vydeje.Date == dt.Date).FirstOrDefault() != null)
+                        if (_context.vybery.Where(x => x.cislo_uzivatele == usr && x.obedId.datum_vydeje.Date == dt.Date && x.forma == 0).FirstOrDefault() != null)
                         {
-                            _VydejniMista.Where(vm => vm.datum_vydeje.Date == dt.Date).FirstOrDefault().Canteen = _context.vybery.Where(x => x.cislo_uzivatele == usr && x.obedId.datum_vydeje.Date == dt.Date).FirstOrDefault().vydejni_misto.nazev;
+                            _VydejniMista.Where(vm => vm.datum_vydeje.Date == dt.Date).FirstOrDefault().Canteen = _context.vybery.Where(x => x.cislo_uzivatele == usr && x.obedId.datum_vydeje.Date == dt.Date && x.forma == 0).FirstOrDefault().vydejni_misto.nazev;
                         }
                     }                  
                     _context.SaveChanges();
@@ -168,7 +163,6 @@ namespace Jopp_lunch.Pages.Choices
             }
             LoadDays();
             LoadLunches(null,null);
-            Console.Out.WriteLine("Some log entry");
             return Page();
         }
 

@@ -24,6 +24,8 @@ namespace Jopp_lunch.Pages.Choices
         }
 
         public List<Vyb> vybery_view { get; set; } = new List<Vyb>();
+        public DateTime loadedDate;
+        public Canteen def_VM { get; set; } = new Canteen();
 
         private readonly Jopp_lunch.Data.CanteenContext _context;
 
@@ -68,7 +70,7 @@ namespace Jopp_lunch.Pages.Choices
                     prijmeni = usr.prijmeni;
                     int celkem = 0;
                     int mb1 = 0, mb2 = 0, mb3 = 0, mb4 = 0;
-                    foreach(var item in Choice.Where(x=>x.obedId.datum_vydeje.Date == dt.Date && x.cislo_uzivatele == usr && x.forma==1).ToList())
+                    foreach(var item in Choice.Where(x=>x.obedId.datum_vydeje.Date == dt.Date && x.cislo_uzivatele == usr && x.forma==1 && x.vydejni_misto.cislo_VM == def_VM.cislo_VM).ToList())
                     {
                         celkem+=item.pocet;
                         if (id_m1 == item.obedId.cislo_obeda) mb1=item.pocet;
@@ -96,6 +98,8 @@ namespace Jopp_lunch.Pages.Choices
         public ListPackedModel(Jopp_lunch.Data.CanteenContext context)
         {
             _context = context;
+            loadedDate = DateTime.Now;
+            if (_context.vydejni_mista != null) def_VM = _context.vydejni_mista.Where(x => x.cislo_VM == 1).FirstOrDefault();
             LoadVybery(DateTime.Now);
         }
 
@@ -111,6 +115,36 @@ namespace Jopp_lunch.Pages.Choices
                 _context.vydejni_mista.Load();
                 _context.polevky.Load();
                 Choice = await _context.vybery.ToListAsync();
+            }
+        }
+
+        public void OnGetMinusDay(int cislo_VM, string dt)
+        {
+            loadedDate = DateTime.Parse(dt).AddDays(-1);
+            if (_context.vydejni_mista != null)
+            {
+                def_VM = _context.vydejni_mista.Where(x => x.cislo_VM == cislo_VM).FirstOrDefault();
+            }
+            LoadVybery(loadedDate);
+        }
+
+        public void OnGetPlusDay(int cislo_VM, string dt)
+        {
+            loadedDate = DateTime.Parse(dt).AddDays(1);
+            if (_context.vydejni_mista != null)
+            {
+                def_VM = _context.vydejni_mista.Where(x => x.cislo_VM == cislo_VM).FirstOrDefault();
+            }
+            LoadVybery(loadedDate);
+        }
+
+        public void OnGetZmenaVM(int cislo_VM, string dt)
+        {
+            if (_context.vydejni_mista != null)
+            {
+                loadedDate = DateTime.Parse(dt);
+                def_VM = _context.vydejni_mista.Where(x => x.cislo_VM != cislo_VM).FirstOrDefault();
+                LoadVybery(loadedDate);
             }
         }
     }

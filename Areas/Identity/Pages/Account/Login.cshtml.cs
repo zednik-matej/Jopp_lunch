@@ -74,6 +74,7 @@ namespace Jopp_lunch.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
+            [Display(Name = "Heslo")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
@@ -81,7 +82,7 @@ namespace Jopp_lunch.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Zapamatovat si?")]
             public bool RememberMe { get; set; }
         }
 
@@ -115,7 +116,7 @@ namespace Jopp_lunch.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.osobni_cislo.ToString(), Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
+                    _logger.LogInformation("Uživatel přihlášen");
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -124,12 +125,12 @@ namespace Jopp_lunch.Areas.Identity.Pages.Account
                 }
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
+                    _logger.LogWarning("Uživatel odhlášen");
                     return RedirectToPage("./Lockout");
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Nesprávné heslo nebo osobní číslo.");
                     return Page();
                 }
             }

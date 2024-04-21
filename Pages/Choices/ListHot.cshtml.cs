@@ -24,16 +24,19 @@ namespace Jopp_lunch.Pages.Choices
         }
 
         public List<Vyb> vybery_view { get; set; } = new List<Vyb>();
+        public DateTime loadedDate;
+        public Canteen def_VM { get; set; } = new Canteen();
 
         private readonly Jopp_lunch.Data.CanteenContext _context;
 
         public void LoadVybery(DateTime dt)
         {
-            if (_context.uzivatele != null && _context.obedy != null && _context.vybery != null)
+            if (_context.uzivatele != null && _context.obedy != null && _context.vybery != null && _context.vydejni_mista != null)
             {
                 _context.uzivatele.Load();
                 _context.obedy.Load();
                 _context.vybery.Load();
+                _context.vydejni_mista.Load();
                 Choice = _context.vybery.ToList();
                 int id_m1 = 0, id_m2 = 0, id_m3 = 0, id_m4 = 0;
                 int i=0;
@@ -67,8 +70,8 @@ namespace Jopp_lunch.Pages.Choices
                     jmeno = usr.jmeno;
                     prijmeni = usr.prijmeni;
                     int celkem = 0;
-                    int m1 = 0, m2 = 0, m3 = 0, m4 = 0, mb1 = 0, mb2 = 0, mb3 = 0, mb4 = 0;
-                    foreach(var item in Choice.Where(x=>x.obedId.datum_vydeje.Date == dt.Date && x.cislo_uzivatele == usr && x.forma==0).ToList())
+                    int m1 = 0, m2 = 0, m3 = 0, m4 = 0;
+                    foreach(var item in Choice.Where(x=>x.obedId.datum_vydeje.Date == dt.Date && x.cislo_uzivatele == usr && x.forma==0 && x.vydejni_misto.cislo_VM== def_VM.cislo_VM).ToList())
                     {
                         celkem+=item.pocet;
                         if (item.forma == 0)
@@ -87,7 +90,7 @@ namespace Jopp_lunch.Pages.Choices
                         vyber.jmeno = jmeno;
                         vyber.prijmeni = prijmeni;
                         vyber.celkem = celkem;
-                        vyber.m1 = "M1:"+m1.ToString();
+                        vyber.m1 = "M1:" + m1.ToString();
                         vyber.m2 = "M2:" + m2.ToString();
                         vyber.m3 = "M3:" + m3.ToString();
                         vyber.m4 = "M4:" + m4.ToString();
@@ -100,7 +103,9 @@ namespace Jopp_lunch.Pages.Choices
         public ListHotModel(Jopp_lunch.Data.CanteenContext context)
         {
             _context = context;
-            LoadVybery(DateTime.Now);
+            loadedDate = DateTime.Now;
+            if(_context.vydejni_mista != null) def_VM = _context.vydejni_mista.Where(x => x.cislo_VM == 1).FirstOrDefault();
+            LoadVybery(loadedDate);
         }
 
         public IList<Choice> Choice { get;set; } = default!;
@@ -115,6 +120,30 @@ namespace Jopp_lunch.Pages.Choices
                 _context.vydejni_mista.Load();
                 _context.polevky.Load();
                 Choice = await _context.vybery.ToListAsync();
+            }
+        }
+
+        public void OnGetMinusDay(int cislo_VM, string dt)
+        {
+            loadedDate = DateTime.Parse(dt).AddDays(-1);
+            def_VM = _context.vydejni_mista.Where(x => x.cislo_VM == cislo_VM).FirstOrDefault();
+            LoadVybery(loadedDate);
+        }
+
+        public void OnGetPlusDay(int cislo_VM, string dt)
+        {
+            loadedDate = DateTime.Parse(dt).AddDays(1);
+            def_VM = _context.vydejni_mista.Where(x => x.cislo_VM == cislo_VM).FirstOrDefault();
+            LoadVybery(loadedDate);
+        }
+
+        public void OnGetZmenaVM(int cislo_VM, string dt)
+        {
+            if (_context.vydejni_mista != null)
+            {
+                loadedDate = DateTime.Parse(dt);
+                def_VM = _context.vydejni_mista.Where(x => x.cislo_VM != cislo_VM).FirstOrDefault();
+                LoadVybery(loadedDate);
             }
         }
     }

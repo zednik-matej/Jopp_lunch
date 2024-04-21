@@ -9,8 +9,19 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.datatables.net/2.0.4/js/dataTables.js"></script>
 <h1>Seznam výběrů</h1>
-
-<a href="#" class="btn btn-warning" id="print" onclick="printContent('Printit')">Tisk</a>
+<a href="#" class="btn btn-xs btn-outline-warning" id="print" onclick="printContent('Printit')">Tisk</a>
+<div class="btn-group btn-group-sm" style="margin-bottom:5px;">
+    <a asp-page-handler="MinusDay" asp-route-cislo_VM="@Model.def_VM.cislo_VM" asp-route-dt="@Model.loadedDate.Date" class="btn btn-xs btn-outline-secondary">
+        <b>-</b>
+    </a>
+    <button type="button" class="btn btn-xs btn-outline-dark" style="pointer-events: none; color:black;">
+        @Model.loadedDate.ToString("dddd dd.MM.yyyy").ToUpper()
+    </button>
+    <a asp-page-handler="PlusDay" asp-route-cislo_VM="@Model.def_VM.cislo_VM" asp-route-dt="@Model.loadedDate.Date" class="btn btn-xs btn-outline-success">
+        <b>+</b>
+    </a>
+</div>
+<a asp-page-handler="ZmenaVM" asp-route-dt="@Model.loadedDate.Date" asp-route-cislo_VM="@Model.def_VM.cislo_VM" class="btn brn-xs btn-outline-primary">@Model.def_VM.nazev</a>
 
 <div class="container" id="Printit">
     <table id="vybery" class="display">
