@@ -20,6 +20,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Jopp_lunch.Pages.Users
 {
+    [Authorize(Roles="admin,editor")]
     public class CreateModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;

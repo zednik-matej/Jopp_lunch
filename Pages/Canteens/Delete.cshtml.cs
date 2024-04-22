@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Jopp_lunch.Pages.Canteens
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin,editor")]
     public class DeleteModel : PageModel
     {
         private readonly Jopp_lunch.Data.CanteenContext _context;

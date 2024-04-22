@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Jopp_lunch.Pages.Users
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin, editor")]
     public class UsersModel : PageModel
     {
         private readonly CanteenContext _context;
@@ -25,8 +25,11 @@ namespace Jopp_lunch.Pages.Users
 
         public async Task OnGetAsync()
         {
-            if (_context.uzivatele != null)
+            
+            if (_context.uzivatele != null && _context.vydejni_mista != null)
             {
+                _context.uzivatele.Load();
+                _context.vydejni_mista.Load();
                 Users = await _context.uzivatele.ToListAsync();
             }
         }

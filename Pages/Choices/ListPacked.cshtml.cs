@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Jopp_lunch.Data;
 using Jopp_lunch.Model.DbEntities;
 using SQLitePCL;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Jopp_lunch.Pages.Choices
 {
+    [Authorize(Roles = "admin,editor,chef")]
     public class ListPackedModel : PageModel
     {
         public class Vyb
@@ -37,6 +39,7 @@ namespace Jopp_lunch.Pages.Choices
                 _context.obedy.Load();
                 _context.vybery.Load();
                 Choice = _context.vybery.ToList();
+                vybery_view = new List<Vyb>();
                 int id_m1 = 0, id_m2 = 0, id_m3 = 0, id_m4 = 0;
                 int i=0;
                 foreach(var obed in _context.obedy.Where(o=>o.datum_vydeje.Date==dt.Date).OrderBy(o=>o.cislo_obeda).ToList())

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Jopp_lunch.Data;
 using Jopp_lunch.Model.DbEntities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Jopp_lunch.Pages.Choices
 {
+    [Authorize(Roles = "admin,editor,chef,employee")]
     public class DetailModel : PageModel
     {
         private readonly Jopp_lunch.Data.CanteenContext _context;

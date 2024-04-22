@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Jopp_lunch.Data;
 using Jopp_lunch.Model.DbEntities;
 using SQLitePCL;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Jopp_lunch.Pages.Choices
 {
+    [Authorize(Roles = "admin,editor,chef")]
     public class ListHotModel : PageModel
     {
         public class Vyb
@@ -38,6 +40,7 @@ namespace Jopp_lunch.Pages.Choices
                 _context.vybery.Load();
                 _context.vydejni_mista.Load();
                 Choice = _context.vybery.ToList();
+                vybery_view = new List<Vyb>();
                 int id_m1 = 0, id_m2 = 0, id_m3 = 0, id_m4 = 0;
                 int i=0;
                 foreach(var obed in _context.obedy.Where(o=>o.datum_vydeje.Date==dt.Date).OrderBy(o=>o.cislo_obeda).ToList())
@@ -102,10 +105,7 @@ namespace Jopp_lunch.Pages.Choices
 
         public ListHotModel(Jopp_lunch.Data.CanteenContext context)
         {
-            _context = context;
-            loadedDate = DateTime.Now;
-            if(_context.vydejni_mista != null) def_VM = _context.vydejni_mista.Where(x => x.cislo_VM == 1).FirstOrDefault();
-            LoadVybery(loadedDate);
+            _context = context;           
         }
 
         public IList<Choice> Choice { get;set; } = default!;
@@ -120,11 +120,15 @@ namespace Jopp_lunch.Pages.Choices
                 _context.vydejni_mista.Load();
                 _context.polevky.Load();
                 Choice = await _context.vybery.ToListAsync();
+                loadedDate = DateTime.Now;
+                if (_context.vydejni_mista != null) def_VM = _context.vydejni_mista.Where(x => x.cislo_VM == 1).FirstOrDefault();
+                LoadVybery(loadedDate);
             }
         }
 
         public void OnGetMinusDay(int cislo_VM, string dt)
         {
+            
             loadedDate = DateTime.Parse(dt).AddDays(-1);
             def_VM = _context.vydejni_mista.Where(x => x.cislo_VM == cislo_VM).FirstOrDefault();
             LoadVybery(loadedDate);

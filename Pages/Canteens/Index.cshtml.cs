@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Jopp_lunch.Pages.Canteens
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin,editor")]
     public class IndexModel : PageModel
     {
 

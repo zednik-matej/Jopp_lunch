@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Jopp_lunch.Data;
 using Jopp_lunch.Model.DbEntities;
 using SQLitePCL;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Jopp_lunch.Pages.Choices
 {
+    [Authorize(Roles = "admin,editor,chef")]
     public class ListModel : PageModel
     {
         public class Vyb

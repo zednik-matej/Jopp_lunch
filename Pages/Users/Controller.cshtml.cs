@@ -23,6 +23,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Jopp_lunch.Pages.Users
 {
+    [Authorize(Roles = "admin,editor")]
     public class ControllerModel : PageModel
     {
         private readonly Jopp_lunch.Data.CanteenContext _context;
@@ -38,7 +39,9 @@ namespace Jopp_lunch.Pages.Users
             IUserStore<User> userStore,
             SignInManager<User> signInManager,
             ILogger<UserController> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            Jopp_lunch.Data.CanteenContext context
+            )
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -46,6 +49,7 @@ namespace Jopp_lunch.Pages.Users
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         public async Task OnGet()
@@ -56,7 +60,7 @@ namespace Jopp_lunch.Pages.Users
             _userStore,
             _logger,
             _emailSender);
-            await usrcntrl.LoadCSV();
+            await usrcntrl.LoadCSV(_context);
         }
 
         private IUserEmailStore<User> GetEmailStore()

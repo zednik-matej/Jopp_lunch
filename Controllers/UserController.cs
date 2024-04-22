@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
@@ -42,13 +43,16 @@ namespace Jopp_lunch.Controllers
                 throw new ArgumentNullException("user");
             }
             else if(_signInManager.UserManager.Users.Contains(user)) { throw new DuplicateWaitObjectException(user.Id); }
-            return "password";
+            return "heslo";
         }
 
-        public async Task LoadCSV()
+        public async Task LoadCSV(Data.CanteenContext context)
         {
-            FileStream file = new FileStream(@"C:\Users\zedni\Documents\zames_jopp.csv",
+            FileStream file = new FileStream(@"..\upload\zames_final.csv",
                       FileMode.Open, FileAccess.Read, FileShare.Read);
+
+            /*FileStream file = new FileStream(@"C:\Users\zedni\Documents\zames_final.csv",
+                      FileMode.Open, FileAccess.Read, FileShare.Read);*/
             using (StreamReader sr = new StreamReader(file, Encoding.GetEncoding(1250)))
             {
                 var parser = new Microsoft.VisualBasic.FileIO.TextFieldParser(sr);
@@ -73,8 +77,17 @@ namespace Jopp_lunch.Controllers
                             usr.jmeno = strings[1];
                             usr.osobni_cislo = Int32.Parse(row[1]);
                             usr.Email = row[2];
-                            usr.Password = row[3];
-                            usr.ConfirmPassword = row[3];
+                            usr.Password = row[7];
+                            usr.ConfirmPassword = row[7];                           
+                            if (context != null && context.vydejni_mista != null)
+                            {
+                                context.vydejni_mista.Load();
+                                if (context.vydejni_mista.Where(x => x.nazev == row[3]).FirstOrDefault() != null)
+                                {
+                                    usr.vychozi_VM = context.vydejni_mista.Where(x => x.nazev == row[3]).FirstOrDefault();
+                                }
+                                else usr.vychozi_VM = context.vydejni_mista.FirstOrDefault();
+                            }
                             await CreateUser(usr);
                             ModelState.Clear();
                         }                      
@@ -125,7 +138,7 @@ namespace Jopp_lunch.Controllers
             /// </summary>
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Heslo")]
             public string Password { get; set; }
 
             /// <summary>
@@ -133,9 +146,12 @@ namespace Jopp_lunch.Controllers
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
+            [Display(Name = "Heslo znovu")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Display(Name = "Výchozí výdejní místo")]
+            public Canteen vychozi_VM { get; set; }
         }
 
         public async Task CreateUser(InputModel Input)
@@ -149,7 +165,8 @@ namespace Jopp_lunch.Controllers
                     jmeno = Input.jmeno,
                     prijmeni = Input.prijmeni,
                     UserName = Input.osobni_cislo.ToString(),
-                    Email = Input.Email
+                    Email = Input.Email,
+                    vychozi_VM = Input.vychozi_VM                   
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);

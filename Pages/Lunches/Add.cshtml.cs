@@ -1,5 +1,6 @@
 using Jopp_lunch.Controllers;
 using Jopp_lunch.Model.DbEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using System.Security.Policy;
 
 namespace Jopp_lunch.Pages.Lunches
 {
+    [Authorize(Roles = "admin,editor")]
     public class AddModel : PageModel
     {
         private readonly Jopp_lunch.Data.CanteenContext _context;

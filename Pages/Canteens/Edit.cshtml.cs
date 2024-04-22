@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Jopp_lunch.Pages.Canteens
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin,editor")]
     public class EditModel : PageModel
     {
         private readonly Jopp_lunch.Data.CanteenContext _context;

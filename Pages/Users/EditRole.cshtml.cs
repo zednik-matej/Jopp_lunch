@@ -1,4 +1,5 @@
 using Jopp_lunch.Model.DbEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Jopp_lunch.Pages.Users
 {
+    [Authorize(Roles = "admin,editor")]
     public class EditRoleModel : PageModel
     {
         private readonly Jopp_lunch.Data.CanteenContext _context;

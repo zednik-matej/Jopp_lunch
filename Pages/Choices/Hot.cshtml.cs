@@ -1,4 +1,5 @@
 using Jopp_lunch.Model.DbEntities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,6 +12,7 @@ using System.Security.Claims;
 
 namespace Jopp_lunch.Pages.Choices
 {
+    [Authorize(Roles = "admin,editor,chef,employee")]
     public class HotModel : PageModel
     {
         private readonly Jopp_lunch.Data.CanteenContext _context;

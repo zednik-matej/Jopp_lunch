@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Jopp_lunch.Pages.Users
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin, editor")]
     public class DeleteModel : PageModel
     {
         private readonly Jopp_lunch.Data.CanteenContext _context;
