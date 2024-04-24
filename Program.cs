@@ -1,8 +1,10 @@
 using Jopp_lunch.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Jopp_lunch.Services;
 using Jopp_lunch.Model.DbEntities;
 using System.Globalization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,9 +14,12 @@ builder.Services.AddRazorPages();
 
 
 //DefaultConnection = Local DataBase name, ForpsiDB = forpsi online database
-var connectionString = builder.Configuration.GetConnectionString("ForpsiDB");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<CanteenContext>(options =>
-    options.UseSqlServer(connectionString));
+options.UseSqlServer(connectionString));
+
+
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 builder.Services.AddDefaultIdentity<User>(options => 
 {

@@ -48,18 +48,19 @@ namespace Jopp_lunch.Controllers
 
         public async Task LoadCSV(Data.CanteenContext context)
         {
-            FileStream file = new FileStream(@"..\upload\zames_final.csv",
-                      FileMode.Open, FileAccess.Read, FileShare.Read);
-
-            /*FileStream file = new FileStream(@"C:\Users\zedni\Documents\zames_final.csv",
+            /*FileStream file = new FileStream(@"..\upload\zames_final.csv",
                       FileMode.Open, FileAccess.Read, FileShare.Read);*/
-            using (StreamReader sr = new StreamReader(file, Encoding.GetEncoding(1250)))
+
+            /* FileStream file = new FileStream(@"C:\Users\zedni\Documents\zames_final.csv",
+                       FileMode.Open, FileAccess.Read, FileShare.Read);*/
+            await _emailSender.SendEmailAsync("zednik.mattej@gmail.com", "Test", "Test");
+            /*using (StreamReader sr = new StreamReader(file, Encoding.GetEncoding(1250)))
             {
                 var parser = new Microsoft.VisualBasic.FileIO.TextFieldParser(sr);
                 parser.TextFieldType = Microsoft.VisualBasic.FileIO.FieldType.Delimited;
                 parser.SetDelimiters(new string[] { ";" });
-
-                while (!parser.EndOfData)
+                
+                /*while (!parser.EndOfData)
                 {
                     string[] row = parser.ReadFields();
                     if (row != null)
@@ -69,31 +70,16 @@ namespace Jopp_lunch.Controllers
                         string[] strings = longname.Split(' ');
                         if(longname != null && longname.Length>1 && strings.Count()>1)
                         {
-                            usr.prijmeni = strings[0];
-                            if (strings.Count() > 2)
-                            {
-                                usr.prijmeni += " " + strings[2];
-                            }
                             usr.jmeno = strings[1];
                             usr.osobni_cislo = Int32.Parse(row[1]);
                             usr.Email = row[2];
-                            usr.Password = row[7];
-                            usr.ConfirmPassword = row[7];                           
-                            if (context != null && context.vydejni_mista != null)
-                            {
-                                context.vydejni_mista.Load();
-                                if (context.vydejni_mista.Where(x => x.nazev == row[3]).FirstOrDefault() != null)
-                                {
-                                    usr.vychozi_VM = context.vydejni_mista.Where(x => x.nazev == row[3]).FirstOrDefault();
-                                }
-                                else usr.vychozi_VM = context.vydejni_mista.FirstOrDefault();
-                            }
-                            await CreateUser(usr);
+                            usr.Password = row[7];                      
+
                             ModelState.Clear();
                         }                      
                     }
-                }
-            }
+                }*/
+            //}
         }
 
         public string ReturnUrl { get; set; }

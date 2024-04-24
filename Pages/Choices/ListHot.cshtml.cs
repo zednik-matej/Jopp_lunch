@@ -28,6 +28,7 @@ namespace Jopp_lunch.Pages.Choices
         public List<Vyb> vybery_view { get; set; } = new List<Vyb>();
         public DateTime loadedDate;
         public Canteen def_VM { get; set; } = new Canteen();
+        public IList<Lunch> Lunch { get; set; } = default!;
 
         private readonly Jopp_lunch.Data.CanteenContext _context;
 
@@ -40,6 +41,10 @@ namespace Jopp_lunch.Pages.Choices
                 _context.vybery.Load();
                 _context.vydejni_mista.Load();
                 Choice = _context.vybery.ToList();
+                Lunch = _context.obedy
+                    .Where(x => x.datum_vydeje.Date == dt.Date /*&& x.datum_vydeje.Date <= endOfWeek.Date*/)
+                    .OrderBy(o => o.datum_vydeje)
+                    .ToList();
                 vybery_view = new List<Vyb>();
                 int id_m1 = 0, id_m2 = 0, id_m3 = 0, id_m4 = 0;
                 int i=0;

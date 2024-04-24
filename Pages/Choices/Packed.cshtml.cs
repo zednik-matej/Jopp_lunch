@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using PublicHoliday;
 using System.Collections.Immutable;
 using System.Globalization;
 using System.Security.Claims;
@@ -47,22 +48,10 @@ namespace Jopp_lunch.Pages.Choices
 
         private void LoadDays()
         {
-            if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
-            {
-                startOfWeek = DateTime.Today.AddDays(4);
-                return;
-            }
-            else if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
-            {
-                startOfWeek = DateTime.Today.AddDays(3);
-                return;
-            }
-            if (DateTime.Now.Hour >= 12) 
-            { 
-                if(DateTime.Now.DayOfWeek == DayOfWeek.Friday) { startOfWeek = DateTime.Today.AddDays(5); }
-                else startOfWeek = DateTime.Today.AddDays(3); 
-            }
-            else startOfWeek = DateTime.Today.AddDays(2);
+            CzechRepublicPublicHoliday czhol = new CzechRepublicPublicHoliday();
+            DateTime dt = czhol.NextWorkingDayNotSameDay(DateTime.Now);
+            if (DateTime.Now.Hour > 12) dt=dt.AddDays(1);
+            startOfWeek = czhol.NextWorkingDayNotSameDay(dt);
         }
 
         private void LoadLunches(string datum_vydeje, string canteen_name)
@@ -169,12 +158,13 @@ namespace Jopp_lunch.Pages.Choices
 
         public IActionResult OnGetRemoveLunch(int id)
         {
-            if (_context.vybery != null && _context.obedy != null)
+            if (_context.vybery != null && _context.obedy != null && _context.uzivatele !=null)
             {
                 Lunch lnch = _context.obedy.Where(ob => ob.cislo_obeda == id).FirstOrDefault() ?? new Lunch();
                 if (lnch != null)
                 {
-                    Choice choice = _context.vybery.Where(x => x.obedId == lnch && x.forma == 1).FirstOrDefault() ?? new Choice();
+                    User thisUsr = _context.uzivatele.Where(x => x.Id == _userManager.GetUserId(HttpContext.User)).FirstOrDefault() ?? new User();
+                    Choice choice = _context.vybery.Where(x => x.obedId == lnch && x.forma == 1 && x.cislo_uzivatele == thisUsr).FirstOrDefault() ?? new Choice();
                     if (choice != null && choice.pocet>0)
                     {
                         choice.pocet--;
