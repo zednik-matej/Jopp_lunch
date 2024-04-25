@@ -12,10 +12,10 @@ namespace Jopp_lunch.Services
         {
             var client = new SmtpClient("smtp.forpsi.com")
             {
-                EnableSsl = true,
+                EnableSsl = false,
                 UseDefaultCredentials = false,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
-                Port = 465,
+                Port = 587,
                 Credentials = new NetworkCredential("info@jopp-obedy.cz", "vvCsDmdT7#m")
             };
 

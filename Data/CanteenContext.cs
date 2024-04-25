@@ -35,7 +35,12 @@ namespace Jopp_lunch.Data
 
             var employee = new IdentityRole("employee");
             employee.NormalizedName = "employee";
-
+            modelBuilder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+            modelBuilder.Entity<User>()
+            .HasIndex(u => u.osobni_cislo)
+            .IsUnique();
             modelBuilder.Entity<IdentityRole>().HasData(admin, editor, chef, employee);
             modelBuilder.Entity<User>().ToTable("uzivatele");
             modelBuilder.Entity<Lunch>().ToTable("obedy");

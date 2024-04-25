@@ -51,16 +51,16 @@ namespace Jopp_lunch.Controllers
             /*FileStream file = new FileStream(@"..\upload\zames_final.csv",
                       FileMode.Open, FileAccess.Read, FileShare.Read);*/
 
-            /* FileStream file = new FileStream(@"C:\Users\zedni\Documents\zames_final.csv",
-                       FileMode.Open, FileAccess.Read, FileShare.Read);*/
-            await _emailSender.SendEmailAsync("zednik.mattej@gmail.com", "Test", "Test");
-            /*using (StreamReader sr = new StreamReader(file, Encoding.GetEncoding(1250)))
+             FileStream file = new FileStream(@"C:\Users\zedni\Documents\zames_final.csv",
+                       FileMode.Open, FileAccess.Read, FileShare.Read);
+            // await _emailSender.SendEmailAsync("zednik.mattej@gmail.com", "Test", "Test");
+            using (StreamReader sr = new StreamReader(file, Encoding.GetEncoding(1250)))
             {
                 var parser = new Microsoft.VisualBasic.FileIO.TextFieldParser(sr);
                 parser.TextFieldType = Microsoft.VisualBasic.FileIO.FieldType.Delimited;
                 parser.SetDelimiters(new string[] { ";" });
                 
-                /*while (!parser.EndOfData)
+                while (!parser.EndOfData)
                 {
                     string[] row = parser.ReadFields();
                     if (row != null)
@@ -68,18 +68,21 @@ namespace Jopp_lunch.Controllers
                         InputModel usr = new InputModel();
                         string longname = row[0];
                         string[] strings = longname.Split(' ');
-                        if(longname != null && longname.Length>1 && strings.Count()>1)
+                        if (longname != null && longname.Length > 1 && strings.Count() > 1)
                         {
                             usr.jmeno = strings[1];
-                            usr.osobni_cislo = Int32.Parse(row[1]);
                             usr.Email = row[2];
-                            usr.Password = row[7];                      
-
+                            if (usr.Email == "p.havelka@jopp.com" || usr.Email == "p.koudelova@jopp.com" || usr.Email == "martina.krutisova@seznam.cz" /*&& usr.Email.Length > 3*/)
+                            {
+                                string text = "Dobrý den, " + usr.jmeno + "\r\n\r\n" +"Byl jste přidán do jopp-obedy.cz systému.\r\n"+"Vaše přihlašovací údaje jsou: osobní číslo a heslo: "+usr.Password+" \r\n Vyzkoušejte si přihlášení a v případě neúspěchu kontaktujte personální oddělení. \r\n\r\n Hezký den,\r\n Tým jopp-obedy.cz";
+                                usr.Password = row[7];
+                                await _emailSender.SendEmailAsync(usr.Email,"Byl/a jste přidán/a do systému jopp-obedy.cz", text);
+                            }
                             ModelState.Clear();
                         }                      
                     }
-                }*/
-            //}
+                }
+            }
         }
 
         public string ReturnUrl { get; set; }
