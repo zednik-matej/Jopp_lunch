@@ -12,7 +12,6 @@
                 <h2>@sps.datum_vydeje.ToString("dddd dd.MM.yyyy").ToUpper() <a asp-page-handler="ZmenaVM" asp-route-vm="@Model._VydejniMista.Where(x => x.datum_vydeje.Date == @sps.datum_vydeje.Date).FirstOrDefault().Canteen" asp-route-id="@sps.datum_vydeje.ToString("dd.MM.yyyy")" class="btn btn-primary">@Model._VydejniMista.Where(x => x.datum_vydeje.Date == @sps.datum_vydeje.Date).FirstOrDefault().Canteen</a></h2>
             </div>
             <ul class="list-group list-group-flush">
-                    <li class="list-group-item">@Html.DisplayFor(modelItem => sps.popis_obeda)</li>
                 @foreach(var lns in Model.Lunch.Where(x=>x.datum_vydeje.Day==sps.datum_vydeje.Day)){
                 <li class="list-group-item">
                             @Html.DisplayFor(modelItem => lns.popis_obeda)

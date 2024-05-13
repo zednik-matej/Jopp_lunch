@@ -73,7 +73,7 @@ namespace Jopp_lunch.Pages.Choices
                     foreach(var item in Choice.Where(x=>x.obedId.datum_vydeje.Date == dt.Date && x.cislo_uzivatele == usr).ToList())
                     {
                         celkem+=item.pocet;
-                        if (item.forma == 0)
+                        if (item.obedId.forma == 0)
                         {
                             // tepla
                             if (id_m1 == item.obedId.cislo_obeda) m1=item.pocet;

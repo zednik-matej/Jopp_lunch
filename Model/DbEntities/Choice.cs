@@ -15,8 +15,6 @@ namespace Jopp_lunch.Model.DbEntities
         public Lunch obedId { get; set; } = new Lunch();
         [DisplayName("Počet")]
         public int pocet { get; set; }
-        [DisplayName("Forma")]
-        public int forma { get; set; }
         [DisplayName("Výdejní místo")]
         public Canteen vydejni_misto { get; set; } = new Canteen();
     }

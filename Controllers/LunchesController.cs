@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System.IO.Pipelines;
+using PublicHoliday;
 
 namespace Jopp_lunch.Controllers
 {
@@ -46,13 +47,14 @@ namespace Jopp_lunch.Controllers
                 sp.popis_obeda = desc;
                 sp.datum_pridani = DateTime.Now;
                 sp.datum_editace = DateTime.Now;
+                sp.forma = 0;
                 _context.polevky.Add(sp);
                 _context.SaveChanges();
                 return 0;
             }
         }
 
-        public int AddLunch(string desc, DateTime issueDate)
+        public int AddLunch(string desc, DateTime issueDate, bool third_lnch = false)
         {
             if(_context == null || _context.polevky==null||_context.obedy==null) { return -1; }
             if (_context.polevky
@@ -66,13 +68,29 @@ namespace Jopp_lunch.Controllers
                 Soup sp = _context.polevky
                 .Where(x => x.datum_vydeje.Date == issueDate.Date)
                 .FirstOrDefault() ?? new Soup();
+
                 Lunch lnch = new Lunch();
                 lnch.cislo_polevky = sp;
-                lnch.datum_vydeje = issueDate;
                 lnch.popis_obeda = desc;
                 lnch.datum_pridani = DateTime.Now;
                 lnch.datum_editace = DateTime.Now;
-                _context.obedy.Add(lnch);
+
+                if (!third_lnch){ 
+                    Lunch ballnch = new Lunch();
+                    ballnch.cislo_polevky = sp;
+                    ballnch.popis_obeda = desc;
+                    ballnch.datum_pridani = DateTime.Now;
+                    ballnch.datum_editace = DateTime.Now;
+                    ballnch.forma = 1;
+                    CzechRepublicPublicHoliday czhol = new CzechRepublicPublicHoliday();
+                    DateTime dt = czhol.NextWorkingDayNotSameDay(issueDate);
+                    ballnch.datum_vydeje = dt;
+                    _context.obedy.Add(ballnch);
+                }   
+                
+                lnch.datum_vydeje = issueDate;
+                lnch.forma = 0;
+                _context.obedy.Add(lnch);           
                 _context.SaveChanges();
                 return 0;
             }
@@ -115,7 +133,7 @@ namespace Jopp_lunch.Controllers
                     }
                     if(line[0] == '4')
                     {
-                        err = AddLunch(prelastline+lastline, issueDate);
+                        err = AddLunch(prelastline+lastline, issueDate,true);
                         if (err != 0) continue;
                         err = AddLunch(line.Substring(3), issueDate);
                         if (err != 0) continue;

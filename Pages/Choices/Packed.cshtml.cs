@@ -48,10 +48,11 @@ namespace Jopp_lunch.Pages.Choices
 
         private void LoadDays()
         {
-            CzechRepublicPublicHoliday czhol = new CzechRepublicPublicHoliday();
+            /*CzechRepublicPublicHoliday czhol = new CzechRepublicPublicHoliday();
             DateTime dt = czhol.NextWorkingDayNotSameDay(DateTime.Now);
             if (DateTime.Now.Hour > 12) dt=dt.AddDays(1);
-            startOfWeek = czhol.NextWorkingDayNotSameDay(dt);
+            startOfWeek = czhol.NextWorkingDayNotSameDay(dt);*/
+            startOfWeek = DateTime.Now;
         }
 
         private void LoadLunches(string datum_vydeje, string canteen_name)
@@ -69,9 +70,9 @@ namespace Jopp_lunch.Pages.Choices
                     _context.obedy.Load();
                     _context.polevky.Load();
                     string canteen = "";
-                    if (_context.vybery.Where(x => x.obedId.cislo_polevky == Sp && x.forma == 1).FirstOrDefault() != null)
+                    if (_context.vybery.Where(x => x.obedId.cislo_polevky == Sp && x.obedId.forma == 1).FirstOrDefault() != null)
                     {
-                        canteen = _context.vybery.Where(x => x.obedId.cislo_polevky == Sp && x.forma==1).FirstOrDefault().vydejni_misto.nazev;
+                        canteen = _context.vybery.Where(x => x.obedId.cislo_polevky == Sp && x.obedId.forma ==1).FirstOrDefault().vydejni_misto.nazev;
                     }
                     if (canteen.IsNullOrEmpty()) canteen = "Velké Meziøíèí";//TO DO: vychozi VM z uzivatele
                     DatumVD dvd = new DatumVD(Sp.datum_vydeje, canteen);
@@ -81,7 +82,7 @@ namespace Jopp_lunch.Pages.Choices
             if (_context.obedy != null)
             {
                 Lunch = _context.obedy
-                    .Where(x => x.datum_vydeje.Date >= startOfWeek.Date /*&& x.datum_vydeje.Date <= endOfWeek.Date*/)
+                    .Where(x => x.datum_vydeje.Date >= startOfWeek.Date && x.forma==1 /*&& x.datum_vydeje.Date <= endOfWeek.Date*/)
                     .OrderBy(o => o.datum_vydeje)
                     .ToList();
                 if (_context.vybery != null && _context.uzivatele != null)
@@ -90,19 +91,19 @@ namespace Jopp_lunch.Pages.Choices
                     if (datum_vydeje != null && canteen_name != null && _context.vydejni_mista != null)
                     {
                         DateTime dt = DateTime.Parse(datum_vydeje);
-                        _context.vybery.Where(x => Lunch.Contains(x.obedId) && x.cislo_uzivatele == usr && x.forma == 1 && x.obedId.datum_vydeje.Date == dt.Date)
+                        _context.vybery.Where(x => Lunch.Contains(x.obedId) && x.cislo_uzivatele == usr && x.obedId.forma == 1 && x.obedId.datum_vydeje.Date == dt.Date)
                             .ToList()
                             .ForEach(item => item.vydejni_misto = _context.vydejni_mista
                                     .Where(vm => vm.nazev != canteen_name)
                                     .FirstOrDefault());
-                        if (_context.vybery.Where(x => x.cislo_uzivatele == usr && x.obedId.datum_vydeje.Date == dt.Date && x.forma==1).FirstOrDefault() != null)
+                        if (_context.vybery.Where(x => x.cislo_uzivatele == usr && x.obedId.datum_vydeje.Date == dt.Date && x.obedId.forma ==1).FirstOrDefault() != null)
                         {
-                            _VydejniMista.Where(vm => vm.datum_vydeje.Date == dt.Date).FirstOrDefault().Canteen = _context.vybery.Where(x => x.cislo_uzivatele == usr && x.obedId.datum_vydeje.Date == dt.Date && x.forma==1).FirstOrDefault().vydejni_misto.nazev;
+                            _VydejniMista.Where(vm => vm.datum_vydeje.Date == dt.Date).FirstOrDefault().Canteen = _context.vybery.Where(x => x.cislo_uzivatele == usr && x.obedId.datum_vydeje.Date == dt.Date && x.obedId.forma ==1).FirstOrDefault().vydejni_misto.nazev;
                         }
                     }
                     _context.SaveChanges();
                     Choices = _context.vybery
-                    .Where(x => Lunch.Contains(x.obedId) && x.cislo_uzivatele == usr && x.forma == 1 /*&& x.datum_vydeje.Date <= endOfWeek.Date*/)
+                    .Where(x => Lunch.Contains(x.obedId) && x.cislo_uzivatele == usr && x.obedId.forma == 1 /*&& x.datum_vydeje.Date <= endOfWeek.Date*/)
                     .ToList();
                 }
             }
@@ -129,7 +130,7 @@ namespace Jopp_lunch.Pages.Choices
                 if (lnch.cislo_obeda != 0)
                 {
                     User thisUsr = _context.uzivatele.Where(x => x.Id == _userManager.GetUserId(HttpContext.User)).FirstOrDefault() ?? new User();
-                    Choice choice = _context.vybery.Where(x => x.obedId == lnch &&  x.cislo_uzivatele == thisUsr && x.forma == 1).FirstOrDefault() ?? new Choice();
+                    Choice choice = _context.vybery.Where(x => x.obedId == lnch &&  x.cislo_uzivatele == thisUsr && x.obedId.forma == 1).FirstOrDefault() ?? new Choice();
                     if (choice.cislo_vyberu != 0)
                     {
                         choice.pocet = choice.pocet + 1;
@@ -144,7 +145,6 @@ namespace Jopp_lunch.Pages.Choices
                             choice.cislo_uzivatele = thisUsr;
                             choice.vydejni_misto = _context.vydejni_mista.Where(x => x.cislo_VM == 1).FirstOrDefault() ?? new Canteen();
                             choice.obedId = lnch;
-                            choice.forma = 1;//0-hot,1-packed/cold
                             _context.vybery.Add(choice);
                             _context.SaveChanges();
                         }
@@ -164,7 +164,7 @@ namespace Jopp_lunch.Pages.Choices
                 if (lnch != null)
                 {
                     User thisUsr = _context.uzivatele.Where(x => x.Id == _userManager.GetUserId(HttpContext.User)).FirstOrDefault() ?? new User();
-                    Choice choice = _context.vybery.Where(x => x.obedId == lnch && x.forma == 1 && x.cislo_uzivatele == thisUsr).FirstOrDefault() ?? new Choice();
+                    Choice choice = _context.vybery.Where(x => x.obedId == lnch && x.obedId.forma == 1 && x.cislo_uzivatele == thisUsr).FirstOrDefault() ?? new Choice();
                     if (choice != null && choice.pocet>0)
                     {
                         choice.pocet--;

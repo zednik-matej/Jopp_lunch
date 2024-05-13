@@ -41,13 +41,13 @@ namespace Jopp_lunch.Pages.Choices
                 _context.vybery.Load();
                 Choice = _context.vybery.ToList();
                 Lunch = _context.obedy
-                    .Where(x => x.datum_vydeje.Date == dt.Date /*&& x.datum_vydeje.Date <= endOfWeek.Date*/)
+                    .Where(x => x.datum_vydeje.Date == dt.Date && x.forma == 1 /*&& x.datum_vydeje.Date <= endOfWeek.Date*/)
                     .OrderBy(o => o.datum_vydeje)
                     .ToList();
                 vybery_view = new List<Vyb>();
                 int id_m1 = 0, id_m2 = 0, id_m3 = 0, id_m4 = 0;
                 int i=0;
-                foreach(var obed in _context.obedy.Where(o=>o.datum_vydeje.Date==dt.Date).OrderBy(o=>o.cislo_obeda).ToList())
+                foreach(var obed in _context.obedy.Where(o=>o.datum_vydeje.Date==dt.Date && o.forma==1).OrderBy(o=>o.cislo_obeda).ToList())
                 {
                     switch (i)
                     {
@@ -78,7 +78,7 @@ namespace Jopp_lunch.Pages.Choices
                     prijmeni = usr.prijmeni;
                     int celkem = 0;
                     int mb1 = 0, mb2 = 0, mb3 = 0, mb4 = 0;
-                    foreach(var item in Choice.Where(x=>x.obedId.datum_vydeje.Date == dt.Date && x.cislo_uzivatele == usr && x.forma==1 && x.vydejni_misto.cislo_VM == def_VM.cislo_VM).ToList())
+                    foreach(var item in Choice.Where(x=>x.obedId.datum_vydeje.Date == dt.Date && x.cislo_uzivatele == usr && x.obedId.forma == 1 && x.vydejni_misto.cislo_VM == def_VM.cislo_VM).ToList())
                     {
                         celkem+=item.pocet;
                         if (id_m1 == item.obedId.cislo_obeda) mb1=item.pocet;

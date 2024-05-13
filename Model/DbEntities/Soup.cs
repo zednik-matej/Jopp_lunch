@@ -17,5 +17,7 @@ namespace Jopp_lunch.Model.DbEntities
         public DateTime datum_pridani { get; set; }
         [DisplayName("Datum editace")]
         public DateTime datum_editace { get; set; }
+        [DisplayName("Forma výdeje")]
+        public int? forma { get; set; } = 0;
     }
 }
