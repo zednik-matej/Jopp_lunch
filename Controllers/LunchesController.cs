@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System.IO.Pipelines;
 using PublicHoliday;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Jopp_lunch.Controllers
 {
@@ -109,7 +110,8 @@ namespace Jopp_lunch.Controllers
             {
                 if (line.Contains("pondělí") || line.Contains("úterý") || line.Contains("středa") || line.Contains("čtvrtek") || line.Contains("pátek"))
                 {
-                    datum_vydeje = line.Substring(8);
+                    datum_vydeje = line.Split(' ').Skip(1).FirstOrDefault();
+                    if(datum_vydeje.IsNullOrEmpty()) { return -1; }
                     datum_vydeje += DateTime.Now.Year.ToString();
                     issueDate = DateTime.Parse(datum_vydeje);
                 }
