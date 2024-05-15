@@ -28,12 +28,18 @@
     <h2>Teplá strava</h2>
     @{
         int i = 1;
+        string p = "celkový počet: ";
+        string cnt = "";
         string k = "MB";
         string m = "";
     }
     @foreach (var lns in @Model.Lunch.Where(x => x.datum_vydeje.Date == @Model.loadedDate.Date))
     {
-        m = k + i.ToString();
+        if (i == 1) cnt = Model.pocetM1.ToString();
+        else if (i == 2) cnt = Model.pocetM2.ToString();
+        else if (i == 3) cnt = Model.pocetM3.ToString();
+        else cnt = Model.pocetM4.ToString();
+        m = p + cnt + " " + k + i.ToString();
         <h3>@m: @lns.popis_obeda</h3>
         i++;
     }

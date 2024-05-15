@@ -34,7 +34,8 @@ namespace Jopp_lunch.Pages.Choices
 
         public List<DatumVD> _VydejniMista { get; set; } = default!;
 
-        DateTime startOfWeek;
+        public DateTime lockdate;
+        public DateTime startOfWeek;
         public IList<Soup> Soup { get; set; } = default!;
         public IList<Lunch> Lunch { get; set; } = default!;
         public IList<Choice> Choices { get; set; } = default!;
@@ -48,10 +49,10 @@ namespace Jopp_lunch.Pages.Choices
 
         private void LoadDays()
         {
-            /*CzechRepublicPublicHoliday czhol = new CzechRepublicPublicHoliday();
+            CzechRepublicPublicHoliday czhol = new CzechRepublicPublicHoliday();
             DateTime dt = czhol.NextWorkingDayNotSameDay(DateTime.Now);
             if (DateTime.Now.Hour > 12) dt=dt.AddDays(1);
-            startOfWeek = czhol.NextWorkingDayNotSameDay(dt);*/
+            lockdate = czhol.NextWorkingDayNotSameDay(dt);
             startOfWeek = DateTime.Now;
         }
 

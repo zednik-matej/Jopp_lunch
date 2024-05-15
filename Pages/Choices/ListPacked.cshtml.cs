@@ -25,6 +25,10 @@ namespace Jopp_lunch.Pages.Choices
 
         }
 
+        public int pocetM1;
+        public int pocetM2;
+        public int pocetM3;
+        public int pocetM4;
         public List<Vyb> vybery_view { get; set; } = new List<Vyb>();
         public DateTime loadedDate;
         public IList<Lunch> Lunch { get; set; } = default!;
@@ -34,6 +38,10 @@ namespace Jopp_lunch.Pages.Choices
 
         public void LoadVybery(DateTime dt)
         {
+            pocetM1 = 0;
+            pocetM2 = 0;
+            pocetM3 = 0;
+            pocetM4 = 0;
             if (_context.uzivatele != null && _context.obedy != null && _context.vybery != null)
             {
                 _context.uzivatele.Load();
@@ -81,10 +89,10 @@ namespace Jopp_lunch.Pages.Choices
                     foreach(var item in Choice.Where(x=>x.obedId.datum_vydeje.Date == dt.Date && x.cislo_uzivatele == usr && x.obedId.forma == 1 && x.vydejni_misto.cislo_VM == def_VM.cislo_VM).ToList())
                     {
                         celkem+=item.pocet;
-                        if (id_m1 == item.obedId.cislo_obeda) mb1=item.pocet;
-                        else if (id_m2 == item.obedId.cislo_obeda) mb2= item.pocet;
-                        else if (id_m3 == item.obedId.cislo_obeda) mb3= item.pocet;
-                        else if (id_m4 == item.obedId.cislo_obeda) mb4= item.pocet;
+                        if (id_m1 == item.obedId.cislo_obeda) { mb1 = item.pocet; pocetM1 += item.pocet; }
+                        else if (id_m2 == item.obedId.cislo_obeda) { mb2 = item.pocet; pocetM2 += item.pocet; }
+                        else if (id_m3 == item.obedId.cislo_obeda) { mb3 = item.pocet; pocetM3 += item.pocet; }
+                        else if (id_m4 == item.obedId.cislo_obeda) { mb4 = item.pocet; pocetM4 += item.pocet; }
                     }
                     if (celkem > 0)
                     {
