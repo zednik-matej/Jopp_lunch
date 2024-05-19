@@ -33,7 +33,7 @@
         string k = "MB";
         string m = "";
     }
-    @foreach (var lns in @Model.Lunch.Where(x => x.datum_vydeje.Date == @Model.loadedDate.Date))
+    @foreach (var lns in @Model.Lunch.Where(x => x.datum_vydeje.Date == @Model.loadedDate.Date && x.forma==1))
     {
         if (i == 1) cnt = Model.pocetM1.ToString();
         else if (i == 2) cnt = Model.pocetM2.ToString();

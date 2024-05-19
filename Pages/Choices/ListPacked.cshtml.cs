@@ -65,8 +65,6 @@ namespace Jopp_lunch.Pages.Choices
                             id_m2 = obed.cislo_obeda; break;
                         case 2:
                             id_m3 = obed.cislo_obeda; break;
-                        case 3:
-                            id_m4 = obed.cislo_obeda; break;
                         default:
                             break;
                     }
@@ -92,7 +90,6 @@ namespace Jopp_lunch.Pages.Choices
                         if (id_m1 == item.obedId.cislo_obeda) { mb1 = item.pocet; pocetM1 += item.pocet; }
                         else if (id_m2 == item.obedId.cislo_obeda) { mb2 = item.pocet; pocetM2 += item.pocet; }
                         else if (id_m3 == item.obedId.cislo_obeda) { mb3 = item.pocet; pocetM3 += item.pocet; }
-                        else if (id_m4 == item.obedId.cislo_obeda) { mb4 = item.pocet; pocetM4 += item.pocet; }
                     }
                     if (celkem > 0)
                     {
