@@ -20,6 +20,7 @@ using Microsoft.Extensions.Logging;
 using Jopp_lunch.Controllers;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Jopp_lunch.Services;
 
 namespace Jopp_lunch.Pages.Users
 {
@@ -32,7 +33,6 @@ namespace Jopp_lunch.Pages.Users
         private readonly IUserStore<User> _userStore;
         private readonly IUserEmailStore<User> _emailStore;
         private readonly ILogger<UserController> _logger;
-        private readonly IEmailSender _emailSender;
 
         public ControllerModel(
             UserManager<User> userManager,
@@ -48,7 +48,6 @@ namespace Jopp_lunch.Pages.Users
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
-            _emailSender = emailSender;
             _context = context;
         }
 
@@ -59,7 +58,7 @@ namespace Jopp_lunch.Pages.Users
             _userManager,
             _userStore,
             _logger,
-            _emailSender);
+            new EmailSender());
             await usrcntrl.LoadCSV(_context);
         }
 

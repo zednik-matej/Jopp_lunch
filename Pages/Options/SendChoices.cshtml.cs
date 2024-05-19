@@ -4,21 +4,24 @@ using Microsoft.EntityFrameworkCore;
 using PublicHoliday;
 using Aspose.Pdf;
 using Jopp_lunch.Model.DbEntities;
+using Jopp_lunch.Services;
 
 namespace Jopp_lunch.Pages.Options
 {
     public class SendChoicesModel : PageModel
     {
         private readonly Jopp_lunch.Data.CanteenContext _context;
+        EmailSender _emailSender;
         int id_m1 = 0, id_m2 = 0, id_m3 = 0, id_m4 = 0;
         int id_mb1 = 0, id_mb2 = 0, id_mb3 = 0;
 
         public SendChoicesModel(Jopp_lunch.Data.CanteenContext context)
         {
             _context = context;
+            _emailSender = new EmailSender();
         }
 
-        public void LoadPDFPacked(string vydejni_misto, string datum_vydeje, int celkem, int mb1, int mb2, int mb3, string pmb1, string pmb2, string pmb3)
+        public string LoadPDFPacked(string vydejni_misto, string datum_vydeje, int celkem, int mb1, int mb2, int mb3, string pmb1, string pmb2, string pmb3)
         {
             //Aspose.Pdf.Document pdf = new Aspose.Pdf.Document("C:/Users/zedni/objednavka_template_packed.pdf");
             Aspose.Pdf.Document pdf = new Aspose.Pdf.Document("../upload/templates/objednavka_template_packed.pdf");
@@ -53,12 +56,14 @@ namespace Jopp_lunch.Pages.Options
                     tf.Text = DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss");
                 }
             }
-
+            //string path = "C:/Users/zedni/packed_sent_" + vydejni_misto + "_" + DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss") + ".pdf";
+            string path = "../upload/sent_files/ObjednavkaBaleneStravy_" + vydejni_misto + "_" + DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss") + ".pdf";
             // save updated PDF file after text replace
-            pdf.Save("../upload/sent_files/packed_sent_"+vydejni_misto+"_"+ DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss") + ".pdf");
+            pdf.Save(path);
+            return path;
         }
 
-        public void LoadPDFHot(string vydejni_misto, string datum_vydeje, int celkem, int m1,int m2, int m3, int m4, string ppol, string pm1, string pm2, string pm3, string pm4)
+        public string LoadPDFHot(string vydejni_misto, string datum_vydeje, int celkem, int m1,int m2, int m3, int m4, string ppol, string pm1, string pm2, string pm3, string pm4)
         {
             //Aspose.Pdf.Document pdf = new Aspose.Pdf.Document("C:/Users/zedni/objednavka_template.pdf");
             Aspose.Pdf.Document pdf = new Aspose.Pdf.Document("../upload/templates/objednavka_template.pdf");
@@ -96,12 +101,14 @@ namespace Jopp_lunch.Pages.Options
                     tf.Text = DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss");
                 }
             }
-
+            //string path = "C:/Users/zedni/hot_sent_" + vydejni_misto + "_" + DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss") + ".pdf";
+            string path = "../upload/sent_files/ObjednavkaTepleStravy_" + vydejni_misto + "_" + DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss") + ".pdf";
             // save updated PDF file after text replace
-            pdf.Save("../upload/sent_files/hot_sent_"+vydejni_misto+"_"+ DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss") + ".pdf");
+            pdf.Save(path);
+            return path;
         }
 
-        public void LoadHot(int VM)
+        public string LoadHot(int VM)
         {
             if (_context != null)
             {
@@ -137,9 +144,10 @@ namespace Jopp_lunch.Pages.Options
                         else if (id_m4 == item.obedId.cislo_obeda) { pm4 += item.pocet; }
                     }
                     string vyd_mis = _context.vydejni_mista.Where(x => x.cislo_VM == VM).FirstOrDefault().nazev;
-                    LoadPDFHot(vyd_mis, firstWork.ToString("dd.MM.yyyy"), celkem, pm1, pm2, pm3, pm4, popis_pol, m1, m2, m3, m4);
+                    return LoadPDFHot(vyd_mis, firstWork.ToString("dd.MM.yyyy"), celkem, pm1, pm2, pm3, pm4, popis_pol, m1, m2, m3, m4);                   
                 }
             }
+            return "";
         }
 
 
@@ -193,7 +201,7 @@ namespace Jopp_lunch.Pages.Options
             }
         }
 
-        public void LoadPacked(int VM)
+        public string LoadPacked(int VM)
         {
             if (_context != null)
             {
@@ -227,17 +235,19 @@ namespace Jopp_lunch.Pages.Options
                         else if (id_mb3 == item.obedId.cislo_obeda) { pmb3 += item.pocet; }
                     }
                     string vyd_mis = _context.vydejni_mista.Where(x => x.cislo_VM == VM).FirstOrDefault().nazev;
-                    LoadPDFPacked(vyd_mis, secondWork.ToString("dd.MM.yyyy"), celkem, pmb1, pmb2, pmb3, mb1, mb2, mb3);
+                    return LoadPDFPacked(vyd_mis, secondWork.ToString("dd.MM.yyyy"), celkem, pmb1, pmb2, pmb3, mb1, mb2, mb3);
                 }
             }
+            return "";
         }
 
         public void OnGet()
-        {
-            LoadPacked(1);
-            LoadPacked(2);
-            LoadHot(1);
-            LoadHot(2);
+        {           
+            string path1 = LoadPacked(1);
+            string path2 = LoadPacked(2);
+            string path3 = LoadHot(1);
+            string path4 = LoadHot(2);
+            _emailSender.SendEmail4AttachAsync("zednik.mattej@gmail.com","JOPP objednávka","Dobrý den,\r\n\r\nzasíláme objednávku stravy.\r\n\r\nDìkujeme,\r\njopp-obedy.cz",path1,path2,path3,path4);
         }
     }
 }

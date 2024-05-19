@@ -1,4 +1,5 @@
 ﻿using Jopp_lunch.Model.DbEntities;
+using Jopp_lunch.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -17,14 +18,14 @@ namespace Jopp_lunch.Controllers
         private readonly IUserStore<User> _userStore;
         private readonly IUserEmailStore<User> _emailStore;
         private readonly ILogger<UserController> _logger;
-        private readonly IEmailSender _emailSender;
+        private readonly EmailSender _emailSender;
 
         public UserController(Data.CanteenContext context, 
             SignInManager<User> signInManager, 
             UserManager<User> userManager,
             IUserStore<User> userStore,
             ILogger<UserController> logger,
-            IEmailSender emailSender)
+            EmailSender emailSender)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -48,11 +49,11 @@ namespace Jopp_lunch.Controllers
 
         public async Task LoadCSV(Data.CanteenContext context)
         {
-            /*FileStream file = new FileStream(@"..\upload\zames_final.csv",
-                      FileMode.Open, FileAccess.Read, FileShare.Read);*/
+            FileStream file = new FileStream(@"..\upload\zames_final.csv",
+                      FileMode.Open, FileAccess.Read, FileShare.Read);
 
-             FileStream file = new FileStream(@"C:\Users\zedni\Documents\zames_final.csv",
-                       FileMode.Open, FileAccess.Read, FileShare.Read);
+             /*FileStream file = new FileStream(@"C:\Users\zedni\Documents\zames_final.csv",
+                       FileMode.Open, FileAccess.Read, FileShare.Read);*/
             //await _emailSender.SendEmailAsync("zednik.mattej@gmail.com", "Test", "Test <a href='jopp-obedy.cz' >jopp-obedy</a>");
             using (StreamReader sr = new StreamReader(file, Encoding.GetEncoding(1250)))
             {
