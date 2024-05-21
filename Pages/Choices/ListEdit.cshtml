@@ -1,0 +1,233 @@
+﻿@page
+@model Jopp_lunch.Pages.Choices.ListEditModel
+@{
+}
+
+@{
+    ViewData["Title"] = "List-Packed";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.4/css/dataTables.dataTables.css" />
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.datatables.net/2.0.4/js/dataTables.js"></script>
+<h1>Seznam výběrů - možnost editace výběrů jednotlivých uživatelů</h1>
+<div class="btn-group btn-group-sm" style="margin-bottom:5px;">
+    <a href="#" class="btn btn-xs btn-outline-dark" id="print" onclick="printContent('Printit')">Tisk</a>
+    <a asp-page-handler="MinusDay" asp-route-cislo_VM="@Model.def_VM.cislo_VM" asp-route-dt="@Model.loadedDate.Date" class="btn btn-xs btn-outline-dark">
+        <b>-</b>
+    </a>
+    <button type="button" class="btn btn-xs btn-outline-dark" style="pointer-events: none; color:black;">
+        @Model.loadedDate.ToString("dddd dd.MM.yyyy").ToUpper()
+    </button>
+    <a asp-page-handler="PlusDay" asp-route-cislo_VM="@Model.def_VM.cislo_VM" asp-route-dt="@Model.loadedDate.Date" class="btn btn-xs btn-outline-dark">
+        <b>+</b>
+    </a>
+    <a asp-page-handler="ZmenaVM" asp-route-dt="@Model.loadedDate.Date" asp-route-cislo_VM="@Model.def_VM.cislo_VM" class="btn brn-xs btn-outline-dark">@Model.def_VM.nazev</a>
+</div>
+
+
+<div class="container" id="Printit">
+    <h2>Teplá strava</h2>
+    @{
+        int i = 1;
+        string p = "celkový počet: ";
+        string cnt = "";
+        string k = "MB";
+        string l = "M";
+        string m = "";
+    }
+    @foreach (var lns in @Model.Lunches.Where(x => x.datum_vydeje.Date == @Model.loadedDate.Date && x.forma == 0))
+    {
+        if (i == 1) cnt = Model.pocetM1.ToString();
+        else if (i == 2) cnt = Model.pocetM2.ToString();
+        else if (i == 3) cnt = Model.pocetM3.ToString();
+        else cnt = Model.pocetM4.ToString();
+        m = p + cnt + " " + l + i.ToString();
+        <h3>@m: @lns.popis_obeda</h3>
+        i++;
+    }
+    @{
+        i = 1;
+    }
+    @foreach (var lns in @Model.Lunches.Where(x => x.datum_vydeje.Date == @Model.loadedDate.Date && x.forma == 1))
+    {
+        if (i == 1) cnt = Model.pocetMB1.ToString();
+        else if (i == 2) cnt = Model.pocetMB2.ToString();
+        else cnt = Model.pocetMB3.ToString();
+        m = p + cnt + " " + k + i.ToString();
+        <h3>@m: @lns.popis_obeda</h3>
+        i++;
+    }
+    <table id="vybery" class="display">
+        <thead>
+            <tr>
+                <th>Osobní číslo</th>
+                <th>Jméno</th>
+                <th>Přijmení</th>
+                <th>Celkový počet obědů</th>
+                <th>počet M1</th>
+                <th>M2</th>
+                <th>M3</th>
+                <th>M4</th>
+                <th>MB1</th>
+                <th>MB2</th>
+                <th>MB3</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.vybery_view)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User_id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.jmeno)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.prijmeni)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.celkem)
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm" style="">
+                            <a asp-page-handler="RemoveLunch" asp-route-usr="item.User_id" asp-route-id="@Model.id_m1" class="btn btn-xs btn-outline-secondary">
+                                <b>-</b>
+                            </a>
+                            <button type="button" class="btn btn-xs btn-outline-dark" style="pointer-events: none; color:black;">
+                                @Html.DisplayFor(modelItem => item.m1)
+                            </button>
+                            <a asp-page-handler="AddLunch" asp-route-usr="item.User_id" asp-route-id="@Model.id_m1" class="btn btn-xs btn-outline-success">
+                                <b>+</b>
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm" style="">
+                            <a asp-page-handler="RemoveLunch" asp-route-usr="item.User_id" asp-route-id="@Model.id_m2" class="btn btn-xs btn-outline-secondary">
+                                <b>-</b>
+                            </a>
+                            <button type="button" class="btn btn-xs btn-outline-dark" style="pointer-events: none; color:black;">
+                                @Html.DisplayFor(modelItem => item.m2)
+                            </button>
+                            <a asp-page-handler="AddLunch" asp-route-usr="item.User_id" asp-route-id="@Model.id_m2" class="btn btn-xs btn-outline-success">
+                                <b>+</b>
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm" style="">
+                            <a asp-page-handler="RemoveLunch" asp-route-usr="item.User_id" asp-route-id="@Model.id_m3" class="btn btn-xs btn-outline-secondary">
+                                <b>-</b>
+                            </a>
+                            <button type="button" class="btn btn-xs btn-outline-dark" style="pointer-events: none; color:black;">
+                                @Html.DisplayFor(modelItem => item.m3)
+                            </button>
+                            <a asp-page-handler="AddLunch" asp-route-usr="item.User_id" asp-route-id="@Model.id_m3" class="btn btn-xs btn-outline-success">
+                                <b>+</b>
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm" style="">
+                            <a asp-page-handler="RemoveLunch" asp-route-usr="item.User_id" asp-route-id="@Model.id_m4" class="btn btn-xs btn-outline-secondary">
+                                <b>-</b>
+                            </a>
+                            <button type="button" class="btn btn-xs btn-outline-dark" style="pointer-events: none; color:black;">
+                                @Html.DisplayFor(modelItem => item.m4)
+                            </button>
+                            <a asp-page-handler="AddLunch" asp-route-usr="item.User_id" asp-route-id="@Model.id_m4" class="btn btn-xs btn-outline-success">
+                                <b>+</b>
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm" style="">
+                            <a asp-page-handler="RemoveLunch" asp-route-usr="item.User_id" asp-route-id="@Model.id_mb1" class="btn btn-xs btn-outline-secondary">
+                                <b>-</b>
+                            </a>
+                            <button type="button" class="btn btn-xs btn-outline-dark" style="pointer-events: none; color:black;">
+                                @Html.DisplayFor(modelItem => item.mb1)
+                            </button>
+                            <a asp-page-handler="AddLunch" asp-route-usr="item.User_id" asp-route-id="@Model.id_mb1" class="btn btn-xs btn-outline-success">
+                                <b>+</b>
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm" style="">
+                            <a asp-page-handler="RemoveLunch" asp-route-usr="item.User_id" asp-route-id="@Model.id_mb2" class="btn btn-xs btn-outline-secondary">
+                                <b>-</b>
+                            </a>
+                            <button type="button" class="btn btn-xs btn-outline-dark" style="pointer-events: none; color:black;">
+                                @Html.DisplayFor(modelItem => item.mb2)
+                            </button>
+                            <a asp-page-handler="AddLunch" asp-route-usr="item.User_id" asp-route-id="@Model.id_mb2" class="btn btn-xs btn-outline-success">
+                                <b>+</b>
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm" style="">
+                            <a asp-page-handler="RemoveLunch" asp-route-usr="item.User_id" asp-route-id="@Model.id_mb3" class="btn btn-xs btn-outline-secondary">
+                                <b>-</b>
+                            </a>
+                            <button type="button" class="btn btn-xs btn-outline-dark" style="pointer-events: none; color:black;">
+                                @Html.DisplayFor(modelItem => item.mb3)
+                            </button>
+                            <a asp-page-handler="AddLunch" asp-route-usr="item.User_id" asp-route-id="@Model.id_mb3" class="btn btn-xs btn-outline-success">
+                                <b>+</b>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <
+</div>
+
+<script type="text/javascript">
+    function printContent(el) {
+        var restorepage = document.body.innerHTML;
+        var printcontent = document.getElementById(el).innerHTML;
+        document.body.innerHTML = printcontent;
+        window.print();
+        document.body.innerHTML = restorepage;
+    }
+
+    new DataTable('#vybery', {
+        language: {
+            url: '//cdn.datatables.net/plug-ins/2.0.4/i18n/cs.json',
+        },
+        initComplete: function () {
+            this.api()
+                .columns()
+                .every(function () {
+                    let column = this;
+
+                    // Create select element
+                    let select = document.createElement('select');
+                    select.add(new Option(''));
+                    column.footer().replaceChildren(select);
+
+                    // Apply listener for user change in value
+                    select.addEventListener('change', function () {
+                        column
+                            .search(select.value, { exact: true })
+                            .draw();
+                    });
+
+                    // Add list of options
+                    column
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function (d, j) {
+                            select.add(new Option(d));
+                        });
+                });
+        }
+    });
+</script>

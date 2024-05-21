@@ -40,17 +40,21 @@ namespace Jopp_lunch.Services
             };
             ContentType ct = new ContentType(MediaTypeNames.Application.Pdf);
             Attachment attach1 = new Attachment(attach1_path, ct);
-            attach1_path.Remove(0,21);
+            attach1_path = attach1_path.Remove(0,21);
             attach1.Name = attach1_path;
+            //attach1.Dispose();
             Attachment attach2 = new Attachment(attach2_path, ct);
-            attach2_path.Remove(0, 21);
+            attach2_path = attach2_path.Remove(0, 21);
             attach2.Name = attach2_path;
+            //attach2.Dispose();
             Attachment attach3 = new Attachment(attach3_path, ct);
-            attach3_path.Remove(0, 21);
+            attach3_path = attach3_path.Remove(0, 21);
             attach3.Name = attach3_path;
+            //attach3.Dispose();
             Attachment attach4 = new Attachment(attach4_path, ct);
-            attach4_path.Remove(0, 21);
-            attach4.Name = attach1_path;
+            attach4_path = attach4_path.Remove(0, 21);
+            attach4.Name = attach4_path;
+            //attach4.Dispose();
 
             MailMessage msg = new MailMessage
                 (from: "info@jopp-obedy.cz",
@@ -58,10 +62,10 @@ namespace Jopp_lunch.Services
                 subject: subject,
                  message
                 );
-            msg.Attachments.Add( attach1);
-            msg.Attachments.Add( attach2 );
-            msg.Attachments.Add( attach3 );
-            msg.Attachments.Add( attach4 );
+            msg.Attachments.Add(attach1);
+            msg.Attachments.Add(attach2);
+            msg.Attachments.Add(attach3);
+            msg.Attachments.Add(attach4);
             return client.SendMailAsync(msg);
         }
     }

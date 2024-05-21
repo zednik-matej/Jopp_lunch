@@ -25,7 +25,7 @@ namespace Jopp_lunch.Pages.Options
         {
             //Aspose.Pdf.Document pdf = new Aspose.Pdf.Document("C:/Users/zedni/objednavka_template_packed.pdf");
             Aspose.Pdf.Document pdf = new Aspose.Pdf.Document("../upload/templates/objednavka_template_packed.pdf");
-            //..\upload\
+
             // instantiate TextFragment Absorber object
             Aspose.Pdf.Text.TextFragmentAbsorber TextFragmentAbsorberAddress = new Aspose.Pdf.Text.TextFragmentAbsorber();
 
