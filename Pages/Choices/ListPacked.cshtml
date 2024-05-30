@@ -37,8 +37,7 @@
     {
         if (i == 1) cnt = Model.pocetM1.ToString();
         else if (i == 2) cnt = Model.pocetM2.ToString();
-        else if (i == 3) cnt = Model.pocetM3.ToString();
-        else cnt = Model.pocetM4.ToString();
+        else cnt = Model.pocetM3.ToString();
         m = p + cnt + " " + k + i.ToString();
         <h3>@m: @lns.popis_obeda</h3>
         i++;
@@ -53,7 +52,6 @@
                 <th>počet MB1</th>
                 <th>MB2</th>
                 <th>MB3</th>
-                <th>MB4</th>
             </tr>
         </thead>
         <tbody>
@@ -79,9 +77,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.mb3)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.mb4)
                 </td>
             </tr>
     }

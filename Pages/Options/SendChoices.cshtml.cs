@@ -248,6 +248,7 @@ namespace Jopp_lunch.Pages.Options
             string path3 = LoadHot(1);
             string path4 = LoadHot(2);
             _emailSender.SendEmail4AttachAsync("zednik.mattej@gmail.com","JOPP objednávka","Dobrý den,\r\n\r\nzasíláme objednávku stravy.\r\n\r\nDìkujeme,\r\njopp-obedy.cz",path1,path2,path3,path4);
+            _emailSender.SendEmail4AttachAsync("p.havelka@jopp.com","JOPP objednávka","Dobrý den,\r\n\r\nzasíláme objednávku stravy.\r\n\r\nDìkujeme,\r\njopp-obedy.cz",path1,path2,path3,path4);
         }
     }
 }

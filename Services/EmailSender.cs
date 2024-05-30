@@ -39,33 +39,36 @@ namespace Jopp_lunch.Services
                 Credentials = new NetworkCredential("info@jopp-obedy.cz", "vvCsDmdT7#m")
             };
             ContentType ct = new ContentType(MediaTypeNames.Application.Pdf);
-            Attachment attach1 = new Attachment(attach1_path, ct);
-            attach1_path = attach1_path.Remove(0,21);
-            attach1.Name = attach1_path;
-            //attach1.Dispose();
-            Attachment attach2 = new Attachment(attach2_path, ct);
-            attach2_path = attach2_path.Remove(0, 21);
-            attach2.Name = attach2_path;
-            //attach2.Dispose();
-            Attachment attach3 = new Attachment(attach3_path, ct);
-            attach3_path = attach3_path.Remove(0, 21);
-            attach3.Name = attach3_path;
-            //attach3.Dispose();
-            Attachment attach4 = new Attachment(attach4_path, ct);
-            attach4_path = attach4_path.Remove(0, 21);
-            attach4.Name = attach4_path;
-            //attach4.Dispose();
 
-            MailMessage msg = new MailMessage
-                (from: "info@jopp-obedy.cz",
+            // Původní cesty k souborům
+            string originalAttach1Path = attach1_path;
+            string originalAttach2Path = attach2_path;
+            string originalAttach3Path = attach3_path;
+            string originalAttach4Path = attach4_path;
+
+            Attachment attach1 = new Attachment(originalAttach1Path, ct);
+            attach1.Name = Path.GetFileName(originalAttach1Path);
+
+            Attachment attach2 = new Attachment(originalAttach2Path, ct);
+            attach2.Name = Path.GetFileName(originalAttach2Path);
+
+            Attachment attach3 = new Attachment(originalAttach3Path, ct);
+            attach3.Name = Path.GetFileName(originalAttach3Path);
+
+            Attachment attach4 = new Attachment(originalAttach4Path, ct);
+            attach4.Name = Path.GetFileName(originalAttach4Path);
+
+            MailMessage msg = new MailMessage(
+                from: "info@jopp-obedy.cz",
                 to: email,
                 subject: subject,
-                 message
-                );
+                body: message
+            );
             msg.Attachments.Add(attach1);
             msg.Attachments.Add(attach2);
             msg.Attachments.Add(attach3);
             msg.Attachments.Add(attach4);
+
             return client.SendMailAsync(msg);
         }
     }

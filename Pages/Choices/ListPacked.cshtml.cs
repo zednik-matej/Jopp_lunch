@@ -28,7 +28,6 @@ namespace Jopp_lunch.Pages.Choices
         public int pocetM1;
         public int pocetM2;
         public int pocetM3;
-        public int pocetM4;
         public List<Vyb> vybery_view { get; set; } = new List<Vyb>();
         public DateTime loadedDate;
         public IList<Lunch> Lunch { get; set; } = default!;
@@ -41,7 +40,6 @@ namespace Jopp_lunch.Pages.Choices
             pocetM1 = 0;
             pocetM2 = 0;
             pocetM3 = 0;
-            pocetM4 = 0;
             if (_context.uzivatele != null && _context.obedy != null && _context.vybery != null)
             {
                 _context.uzivatele.Load();
@@ -53,7 +51,7 @@ namespace Jopp_lunch.Pages.Choices
                     .OrderBy(o => o.datum_vydeje)
                     .ToList();
                 vybery_view = new List<Vyb>();
-                int id_m1 = 0, id_m2 = 0, id_m3 = 0, id_m4 = 0;
+                int id_m1 = 0, id_m2 = 0, id_m3 = 0;
                 int i=0;
                 foreach(var obed in _context.obedy.Where(o=>o.datum_vydeje.Date==dt.Date && o.forma==1).OrderBy(o=>o.cislo_obeda).ToList())
                 {
@@ -70,7 +68,7 @@ namespace Jopp_lunch.Pages.Choices
                     }
                     i++;
                 }
-                if(id_m1 == 0 || id_m2 == 0 || id_m3 == 0 || id_m4 == 0)
+                if(id_m1 == 0 || id_m2 == 0 || id_m3 == 0)
                 {
                     return;
                 }
@@ -110,10 +108,7 @@ namespace Jopp_lunch.Pages.Choices
 
         public ListPackedModel(Jopp_lunch.Data.CanteenContext context)
         {
-            _context = context;
-            loadedDate = DateTime.Now;
-            if (_context.vydejni_mista != null) def_VM = _context.vydejni_mista.Where(x => x.cislo_VM == 1).FirstOrDefault();
-            LoadVybery(DateTime.Now);
+            _context = context;          
         }
 
         public IList<Choice> Choice { get;set; } = default!;
@@ -128,6 +123,9 @@ namespace Jopp_lunch.Pages.Choices
                 _context.vydejni_mista.Load();
                 _context.polevky.Load();
                 Choice = await _context.vybery.ToListAsync();
+                loadedDate = DateTime.Now;
+                if (_context.vydejni_mista != null) def_VM = _context.vydejni_mista.Where(x => x.cislo_VM == 1).FirstOrDefault();
+                LoadVybery(DateTime.Now);
             }
         }
 

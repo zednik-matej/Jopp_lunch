@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Operations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PublicHoliday;
@@ -24,11 +25,13 @@ namespace Jopp_lunch.Pages.Choices
         {
             public DateTime datum_vydeje;
             public string Canteen;
+            public int Cnt_ID;
 
-            public DatumVD(DateTime datum_vydeje, string canteen)
+            public DatumVD(DateTime datum_vydeje, string canteen, int cnt_ID)
             {
                 this.datum_vydeje = datum_vydeje;
                 Canteen = canteen;
+                Cnt_ID = cnt_ID;
             }
         }
 
@@ -65,19 +68,29 @@ namespace Jopp_lunch.Pages.Choices
                     .Where(x => x.datum_vydeje.Date >= startOfWeek.Date /*&& x.datum_vydeje.Date<=endOfWeek.Date*/)
                     .OrderBy(o => o.datum_vydeje)
                     .ToList();
-                foreach (Soup Sp in Soup)
+                foreach (Lunch Sp in _context.obedy.Where(x => x.datum_vydeje.Date >= startOfWeek.Date).OrderBy(o => o.datum_vydeje).ToList())
                 {
                     _context.vydejni_mista.Load();
                     _context.obedy.Load();
                     _context.polevky.Load();
                     string canteen = "";
-                    if (_context.vybery.Where(x => x.obedId.cislo_polevky == Sp && x.obedId.forma == 1).FirstOrDefault() != null)
+                    int cnt_id = 1;
+                    User thisUsr = _context.uzivatele.Where(x => x.Id == _userManager.GetUserId(HttpContext.User)).FirstOrDefault() ?? new User();
+                    if (_context.vybery.Where(x => x.obedId.cislo_polevky == Sp.cislo_polevky && x.obedId.forma == 1 && x.cislo_uzivatele == thisUsr).FirstOrDefault() != null)
                     {
-                        canteen = _context.vybery.Where(x => x.obedId.cislo_polevky == Sp && x.obedId.forma ==1).FirstOrDefault().vydejni_misto.nazev;
+                        cnt_id = _context.vybery.Where(x => x.obedId.cislo_polevky == Sp.cislo_polevky && x.obedId.forma ==1 && x.cislo_uzivatele==thisUsr).FirstOrDefault().vydejni_misto.cislo_VM;
                     }
-                    if (canteen.IsNullOrEmpty()) canteen = "Velké Meziøíèí";//TO DO: vychozi VM z uzivatele
-                    DatumVD dvd = new DatumVD(Sp.datum_vydeje, canteen);
-                    _VydejniMista.Add(dvd);
+                    else if (_context.uzivatele.Where(x => x.UserName == thisUsr.UserName).FirstOrDefault().vychozi_VM != null)
+                    {
+                         cnt_id = _context.uzivatele.Where(x => x.UserName == thisUsr.UserName).FirstOrDefault().vychozi_VM.cislo_VM;
+                    }
+                    else cnt_id = _context.vydejni_mista.FirstOrDefault().cislo_VM;
+                    canteen = _context.vydejni_mista.Where(x=>x.cislo_VM== cnt_id).FirstOrDefault().nazev;
+                    DatumVD dvd = new DatumVD(Sp.datum_vydeje, canteen, cnt_id);
+                    if (_VydejniMista.Where(x => x.datum_vydeje == Sp.datum_vydeje).Count() == 0)
+                    {
+                        _VydejniMista.Add(dvd);
+                    }
                 }
             }
             if (_context.obedy != null)
@@ -100,6 +113,7 @@ namespace Jopp_lunch.Pages.Choices
                         if (_context.vybery.Where(x => x.cislo_uzivatele == usr && x.obedId.datum_vydeje.Date == dt.Date && x.obedId.forma ==1).FirstOrDefault() != null)
                         {
                             _VydejniMista.Where(vm => vm.datum_vydeje.Date == dt.Date).FirstOrDefault().Canteen = _context.vybery.Where(x => x.cislo_uzivatele == usr && x.obedId.datum_vydeje.Date == dt.Date && x.obedId.forma ==1).FirstOrDefault().vydejni_misto.nazev;
+                            _VydejniMista.Where(vm => vm.datum_vydeje.Date == dt.Date).FirstOrDefault().Cnt_ID = _context.vybery.Where(x => x.cislo_uzivatele == usr && x.obedId.datum_vydeje.Date == dt.Date && x.obedId.forma ==1).FirstOrDefault().vydejni_misto.cislo_VM;
                         }
                     }
                     _context.SaveChanges();
@@ -124,7 +138,9 @@ namespace Jopp_lunch.Pages.Choices
         }
 
         public IActionResult OnGetAddLunch(int id)
-        {          
+        {
+            LoadDays();
+            LoadLunches(null, null);
             if (_context.vybery != null && _context.obedy != null && _context.uzivatele != null)
             {
                 Lunch lnch = _context.obedy.Where(ob => ob.cislo_obeda == id).FirstOrDefault() ?? new Lunch();
@@ -144,7 +160,18 @@ namespace Jopp_lunch.Pages.Choices
                         {
                             choice.pocet += 1;
                             choice.cislo_uzivatele = thisUsr;
-                            choice.vydejni_misto = _context.vydejni_mista.Where(x => x.cislo_VM == 1).FirstOrDefault() ?? new Canteen();
+                            Canteen cnt;
+                            if (_VydejniMista.Where(x => x.datum_vydeje.Date == lnch.datum_vydeje.Date).FirstOrDefault() != null)
+                            {
+                                int cnt_id = _VydejniMista.Where(x => x.datum_vydeje.Date == lnch.datum_vydeje.Date).FirstOrDefault().Cnt_ID;
+                                cnt = _context.vydejni_mista.Where(x => x.cislo_VM == cnt_id).FirstOrDefault();
+                            }
+                            else if (_context.uzivatele.Where(x => x.UserName == thisUsr.UserName).FirstOrDefault().vychozi_VM != null)
+                            {
+                                cnt = _context.uzivatele.Where(x => x.UserName == thisUsr.UserName).FirstOrDefault().vychozi_VM;
+                            }
+                            else  cnt = _context.vydejni_mista.FirstOrDefault();
+                            choice.vydejni_misto = cnt;
                             choice.obedId = lnch;
                             _context.vybery.Add(choice);
                             _context.SaveChanges();

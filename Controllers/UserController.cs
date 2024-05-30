@@ -76,8 +76,9 @@ namespace Jopp_lunch.Controllers
                             if (usr.Email.Length > 3)
                             {
                                 usr.Password = row[7];
-                                string text = "Dobrý den, " + usr.jmeno + ",\r\n\r\n" +"Byl jste přidán do jopp-obedy.cz systému.\r\n"+"Vaše přihlašovací údaje jsou: osobní číslo a heslo: "+usr.Password+" \r\n Vyzkoušejte si přihlášení a v případě neúspěchu kontaktujte personální oddělení. \r\n\r\n Hezký den,\r\n Tým jopp-obedy.cz";                              
-                                await _emailSender.SendEmailAsync(usr.Email,"Byl/a jste přidán/a do systému jopp-obedy.cz", text);
+                                string text = "Dobrý den, " + usr.jmeno + ",\r\n\r\n" +"Byl jste přidán do www.jopp-obedy.cz systému.\r\n"+"Vaše přihlašovací údaje jsou: osobní číslo a heslo: "+usr.Password+" \r\n Vyzkoušejte si přihlášení a v případě neúspěchu kontaktujte personální oddělení. \r\n\r\n Hezký den,\r\n Tým jopp-obedy.cz";                              
+                                _emailSender.SendEmailAsync(usr.Email,"Byl/a jste přidán/a do systému jopp-obedy.cz", text);
+                                Thread.Sleep(300);
                             }
                             ModelState.Clear();
                         }                      

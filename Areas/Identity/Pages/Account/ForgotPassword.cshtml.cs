@@ -75,7 +75,7 @@ namespace Jopp_lunch.Areas.Identity.Pages.Account
                 await _emailSender.SendEmailAsync(
                     Input.Email,
                     "Resetovat Heslo",
-                    $"Prosím resetujte si heslo přes tento odkaz: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    $"Prosím resetujte si heslo přes tento odkaz: {HtmlEncoder.Default.Encode(callbackUrl)}");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
