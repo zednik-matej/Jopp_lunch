@@ -122,7 +122,7 @@ namespace Jopp_lunch.Pages.Options
                     _context.obedy.Load();
                     _context.polevky.Load();
                     _context.vybery.Load();
-                    int celkem = _context.vybery.Where(x => x.obedId.forma == 0 && x.obedId.datum_vydeje.Date == firstWork.Date && x.vydejni_misto.cislo_VM == VM).ToList().Count();
+                    int celkem;//= _context.vybery.Where(x => x.obedId.forma == 0 && x.obedId.datum_vydeje.Date == firstWork.Date && x.vydejni_misto.cislo_VM == VM).ToList().Count();
                     string popis_pol = "";
                     string m1 = "", m2 = "", m3 = "", m4 = "";
                     int pm1 = 0, pm2 = 0, pm3 = 0, pm4 = 0;
@@ -143,6 +143,7 @@ namespace Jopp_lunch.Pages.Options
                         else if (id_m3 == item.obedId.cislo_obeda) { pm3 += item.pocet; }
                         else if (id_m4 == item.obedId.cislo_obeda) { pm4 += item.pocet; }
                     }
+                    celkem = pm1 + pm2 + pm3 + pm4;
                     string vyd_mis = _context.vydejni_mista.Where(x => x.cislo_VM == VM).FirstOrDefault().nazev;
                     return LoadPDFHot(vyd_mis, firstWork.ToString("dd.MM.yyyy"), celkem, pm1, pm2, pm3, pm4, popis_pol, m1, m2, m3, m4);                   
                 }
@@ -215,7 +216,7 @@ namespace Jopp_lunch.Pages.Options
                     _context.obedy.Load();
                     _context.polevky.Load();
                     _context.vybery.Load();
-                    int celkem = _context.vybery.Where(x => x.obedId.forma == 1 && x.obedId.datum_vydeje.Date == secondWork.Date && x.vydejni_misto.cislo_VM == VM).ToList().Count();
+                    int celkem;//= _context.vybery.Where(x => x.obedId.forma == 1 && x.obedId.datum_vydeje.Date == secondWork.Date && x.vydejni_misto.cislo_VM == VM).ToList().Count();
                     int i = 1;
                     string mb1 = "", mb2 = "", mb3 = "";
                     int pmb1 = 0, pmb2 = 0, pmb3 = 0;
@@ -234,6 +235,7 @@ namespace Jopp_lunch.Pages.Options
                         else if (id_mb2 == item.obedId.cislo_obeda) { pmb2 += item.pocet; }
                         else if (id_mb3 == item.obedId.cislo_obeda) { pmb3 += item.pocet; }
                     }
+                    celkem = pmb1 + pmb2 + pmb3;
                     string vyd_mis = _context.vydejni_mista.Where(x => x.cislo_VM == VM).FirstOrDefault().nazev;
                     return LoadPDFPacked(vyd_mis, secondWork.ToString("dd.MM.yyyy"), celkem, pmb1, pmb2, pmb3, mb1, mb2, mb3);
                 }
@@ -247,7 +249,9 @@ namespace Jopp_lunch.Pages.Options
             string path2 = LoadPacked(2);
             string path3 = LoadHot(1);
             string path4 = LoadHot(2);
+            _emailSender.SendEmail4AttachAsync("info@stravovanipecha.cz", "JOPP objednávka", "Dobrý den,\r\n\r\nzasíláme objednávku stravy.\r\n\r\nDìkujeme,\r\njopp-obedy.cz", path1, path2, path3, path4);
             _emailSender.SendEmail4AttachAsync("zednik.mattej@gmail.com","JOPP objednávka","Dobrý den,\r\n\r\nzasíláme objednávku stravy.\r\n\r\nDìkujeme,\r\njopp-obedy.cz",path1,path2,path3,path4);
+            _emailSender.SendEmail4AttachAsync("p.koudelova@jopp.com", "JOPP objednávka","Dobrý den,\r\n\r\nzasíláme objednávku stravy.\r\n\r\nDìkujeme,\r\njopp-obedy.cz",path1,path2,path3,path4);
             _emailSender.SendEmail4AttachAsync("p.havelka@jopp.com","JOPP objednávka","Dobrý den,\r\n\r\nzasíláme objednávku stravy.\r\n\r\nDìkujeme,\r\njopp-obedy.cz",path1,path2,path3,path4);
         }
     }

@@ -54,8 +54,8 @@ namespace Jopp_lunch.Pages.Choices
         {
             CzechRepublicPublicHoliday czhol = new CzechRepublicPublicHoliday();
             DateTime dt = czhol.NextWorkingDayNotSameDay(DateTime.Now);
-            if (DateTime.Now.Hour > 12) dt=dt.AddDays(1);
-            lockdate = czhol.NextWorkingDayNotSameDay(dt);
+            if (DateTime.Now.Hour > 12) dt=czhol.NextWorkingDayNotSameDay(dt);
+            lockdate = dt;
             startOfWeek = DateTime.Now;
         }
 
@@ -144,37 +144,40 @@ namespace Jopp_lunch.Pages.Choices
             if (_context.vybery != null && _context.obedy != null && _context.uzivatele != null)
             {
                 Lunch lnch = _context.obedy.Where(ob => ob.cislo_obeda == id).FirstOrDefault() ?? new Lunch();
-                if (lnch.cislo_obeda != 0)
+                if (lnch.datum_vydeje.Date > lockdate.Date)
                 {
-                    User thisUsr = _context.uzivatele.Where(x => x.Id == _userManager.GetUserId(HttpContext.User)).FirstOrDefault() ?? new User();
-                    Choice choice = _context.vybery.Where(x => x.obedId == lnch &&  x.cislo_uzivatele == thisUsr && x.obedId.forma == 1).FirstOrDefault() ?? new Choice();
-                    if (choice.cislo_vyberu != 0)
+                    if (lnch.cislo_obeda != 0)
                     {
-                        choice.pocet = choice.pocet + 1;
-                        _context.vybery.Update(choice);
-                        _context.SaveChanges();
-                    }
-                    else
-                    {
-                        if (_context.vydejni_mista != null)
+                        User thisUsr = _context.uzivatele.Where(x => x.Id == _userManager.GetUserId(HttpContext.User)).FirstOrDefault() ?? new User();
+                        Choice choice = _context.vybery.Where(x => x.obedId == lnch && x.cislo_uzivatele == thisUsr && x.obedId.forma == 1).FirstOrDefault() ?? new Choice();
+                        if (choice.cislo_vyberu != 0)
                         {
-                            choice.pocet += 1;
-                            choice.cislo_uzivatele = thisUsr;
-                            Canteen cnt;
-                            if (_VydejniMista.Where(x => x.datum_vydeje.Date == lnch.datum_vydeje.Date).FirstOrDefault() != null)
-                            {
-                                int cnt_id = _VydejniMista.Where(x => x.datum_vydeje.Date == lnch.datum_vydeje.Date).FirstOrDefault().Cnt_ID;
-                                cnt = _context.vydejni_mista.Where(x => x.cislo_VM == cnt_id).FirstOrDefault();
-                            }
-                            else if (_context.uzivatele.Where(x => x.UserName == thisUsr.UserName).FirstOrDefault().vychozi_VM != null)
-                            {
-                                cnt = _context.uzivatele.Where(x => x.UserName == thisUsr.UserName).FirstOrDefault().vychozi_VM;
-                            }
-                            else  cnt = _context.vydejni_mista.FirstOrDefault();
-                            choice.vydejni_misto = cnt;
-                            choice.obedId = lnch;
-                            _context.vybery.Add(choice);
+                            choice.pocet = choice.pocet + 1;
+                            _context.vybery.Update(choice);
                             _context.SaveChanges();
+                        }
+                        else
+                        {
+                            if (_context.vydejni_mista != null)
+                            {
+                                choice.pocet += 1;
+                                choice.cislo_uzivatele = thisUsr;
+                                Canteen cnt;
+                                if (_VydejniMista.Where(x => x.datum_vydeje.Date == lnch.datum_vydeje.Date).FirstOrDefault() != null)
+                                {
+                                    int cnt_id = _VydejniMista.Where(x => x.datum_vydeje.Date == lnch.datum_vydeje.Date).FirstOrDefault().Cnt_ID;
+                                    cnt = _context.vydejni_mista.Where(x => x.cislo_VM == cnt_id).FirstOrDefault();
+                                }
+                                else if (_context.uzivatele.Where(x => x.UserName == thisUsr.UserName).FirstOrDefault().vychozi_VM != null)
+                                {
+                                    cnt = _context.uzivatele.Where(x => x.UserName == thisUsr.UserName).FirstOrDefault().vychozi_VM;
+                                }
+                                else cnt = _context.vydejni_mista.FirstOrDefault();
+                                choice.vydejni_misto = cnt;
+                                choice.obedId = lnch;
+                                _context.vybery.Add(choice);
+                                _context.SaveChanges();
+                            }
                         }
                     }
                 }
@@ -186,18 +189,22 @@ namespace Jopp_lunch.Pages.Choices
 
         public IActionResult OnGetRemoveLunch(int id)
         {
+            LoadDays();
             if (_context.vybery != null && _context.obedy != null && _context.uzivatele !=null)
             {
                 Lunch lnch = _context.obedy.Where(ob => ob.cislo_obeda == id).FirstOrDefault() ?? new Lunch();
-                if (lnch != null)
+                if (lnch.datum_vydeje.Date > lockdate.Date)
                 {
-                    User thisUsr = _context.uzivatele.Where(x => x.Id == _userManager.GetUserId(HttpContext.User)).FirstOrDefault() ?? new User();
-                    Choice choice = _context.vybery.Where(x => x.obedId == lnch && x.obedId.forma == 1 && x.cislo_uzivatele == thisUsr).FirstOrDefault() ?? new Choice();
-                    if (choice != null && choice.pocet>0)
+                    if (lnch != null)
                     {
-                        choice.pocet--;
-                        _context.vybery.Update(choice);
-                        _context.SaveChanges();
+                        User thisUsr = _context.uzivatele.Where(x => x.Id == _userManager.GetUserId(HttpContext.User)).FirstOrDefault() ?? new User();
+                        Choice choice = _context.vybery.Where(x => x.obedId == lnch && x.obedId.forma == 1 && x.cislo_uzivatele == thisUsr).FirstOrDefault() ?? new Choice();
+                        if (choice != null && choice.pocet > 0)
+                        {
+                            choice.pocet--;
+                            _context.vybery.Update(choice);
+                            _context.SaveChanges();
+                        }
                     }
                 }
             }
