@@ -53,7 +53,7 @@ namespace Jopp_lunch.Pages.Choices
         {
             CzechRepublicPublicHoliday czhol = new CzechRepublicPublicHoliday();
             DateTime dt = DateTime.Now;
-            if (DateTime.Now.Hour > 12) dt=dt.AddDays(1);
+            if (DateTime.Now.Hour >= 12) dt= czhol.NextWorkingDayNotSameDay(dt);
             lockdate = czhol.NextWorkingDayNotSameDay(dt);
             startOfWeek = DateTime.Now;
         }
