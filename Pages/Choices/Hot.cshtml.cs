@@ -133,7 +133,7 @@ namespace Jopp_lunch.Pages.Choices
         {
             LoadDays();
             LoadLunches(id,vm);
-            return Page();
+            return RedirectToPage("./Hot");
         }
 
 
@@ -184,7 +184,7 @@ namespace Jopp_lunch.Pages.Choices
             }
             LoadDays();
             LoadLunches(null,null);
-            return Page();
+            return RedirectToPage("./Hot");
         }
 
         public IActionResult OnGetRemoveLunch(int id)
@@ -209,7 +209,7 @@ namespace Jopp_lunch.Pages.Choices
             }
             LoadDays();
             LoadLunches(null,null);
-            return Page();
+            return RedirectToPage("./Hot");
         }
     }
 }
