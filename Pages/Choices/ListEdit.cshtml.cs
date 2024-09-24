@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Jopp_lunch.Pages.Choices
 {
@@ -142,7 +143,7 @@ namespace Jopp_lunch.Pages.Choices
 
         public IList<Choice> Choice { get; set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(string cislo_VM , string dt)
         {
             if (_context.vybery != null && _context.uzivatele != null && _context.obedy != null && _context.vydejni_mista != null && _context.polevky != null)
             {
@@ -152,8 +153,18 @@ namespace Jopp_lunch.Pages.Choices
                 _context.vydejni_mista.Load();
                 _context.polevky.Load();
                 Choice = await _context.vybery.ToListAsync();
-                loadedDate = DateTime.Now;
-                if (_context.vydejni_mista != null) def_VM = _context.vydejni_mista.Where(x => x.cislo_VM == 1).FirstOrDefault();
+                if (!dt.IsNullOrEmpty())
+                {
+                    loadedDate = DateTime.Parse(dt);
+                }
+                else loadedDate = DateTime.Now;
+                if (_context.vydejni_mista != null) {
+                    if (!cislo_VM.IsNullOrEmpty())
+                    {
+                        def_VM = _context.vydejni_mista.Where(x => x.cislo_VM.ToString() == cislo_VM).FirstOrDefault();
+                    }
+                    else def_VM = _context.vydejni_mista.Where(x => x.cislo_VM == 1).FirstOrDefault(); 
+                }
                 LoadVybery(loadedDate);
             }
         }
@@ -183,18 +194,23 @@ namespace Jopp_lunch.Pages.Choices
             }
         }
 
-        public IActionResult OnGetAddLunch(int id, int usr)
+        public IActionResult OnGetAddLunch(int id, int usr, int vm, string dt)
         {
-            if (_context.vybery != null && _context.obedy != null && _context.uzivatele != null)
+            if (_context.vybery != null && _context.obedy != null && _context.uzivatele != null && _context.vydejni_mista != null)
             {
+                _context.vybery.Load();
+                _context.uzivatele.Load();
+                _context.obedy.Load();
+                _context.vydejni_mista.Load();
                 Lunch lnch = _context.obedy.Where(ob => ob.cislo_obeda == id).FirstOrDefault() ?? new Lunch();
-                if (lnch.cislo_obeda != 0)
+                if (lnch != null)
                 {
                     User thisUsr = _context.uzivatele.Where(x => x.osobni_cislo == usr).FirstOrDefault() ?? new User();
-                    Choice choice = _context.vybery.Where(x => x.obedId == lnch && x.cislo_uzivatele == thisUsr).FirstOrDefault() ?? new Choice();
+                    Choice choice = _context.vybery.Where(x => x.obedId == lnch && x.cislo_uzivatele == thisUsr && x.vydejni_misto.cislo_VM == vm).FirstOrDefault() ?? new Choice();
                     if (choice.cislo_vyberu != 0)
                     {
                         choice.pocet = choice.pocet + 1;
+                        choice.vydejni_misto = _context.vydejni_mista.Where(x => x.cislo_VM == vm).FirstOrDefault() ?? new Canteen();
                         _context.vybery.Update(choice);
                         _context.SaveChanges();
                     }
@@ -204,7 +220,7 @@ namespace Jopp_lunch.Pages.Choices
                         {
                             choice.pocet += 1;
                             choice.cislo_uzivatele = thisUsr;
-                            choice.vydejni_misto = _context.vydejni_mista.Where(x => x.cislo_VM == 1).FirstOrDefault() ?? new Canteen();
+                            choice.vydejni_misto = _context.vydejni_mista.Where(x => x.cislo_VM == vm).FirstOrDefault() ?? new Canteen();
                             choice.obedId = lnch;
                             _context.vybery.Add(choice);
                             _context.SaveChanges();
@@ -220,22 +236,33 @@ namespace Jopp_lunch.Pages.Choices
                 _context.vydejni_mista.Load();
                 _context.polevky.Load();
                 Choice = _context.vybery.ToList();
-                loadedDate = DateTime.Now;
-                if (_context.vydejni_mista != null) def_VM = _context.vydejni_mista.Where(x => x.cislo_VM == 1).FirstOrDefault();
+                if (!dt.IsNullOrEmpty())
+                {
+                    loadedDate = DateTime.Parse(dt);
+                }
+                else loadedDate = DateTime.Now;
+                if (_context.vydejni_mista != null)
+                {
+                    def_VM = _context.vydejni_mista.Where(x => x.cislo_VM == vm).FirstOrDefault();
+                }
                 LoadVybery(loadedDate);
             }
-            return Page();
+            return RedirectToPage("",new { dt=loadedDate.ToString("d"), cislo_VM=vm.ToString() });
         }
 
-        public IActionResult OnGetRemoveLunch(int id, int usr)
+        public IActionResult OnGetRemoveLunch(int id, int usr, int vm, string dt)
         {
-            if (_context.vybery != null && _context.obedy != null && _context.uzivatele != null)
+            if (_context.vybery != null && _context.obedy != null && _context.uzivatele != null && _context.vydejni_mista != null)
             {
+                _context.vybery.Load();
+                _context.uzivatele.Load();
+                _context.obedy.Load();
+                _context.vydejni_mista.Load();
                 Lunch lnch = _context.obedy.Where(ob => ob.cislo_obeda == id).FirstOrDefault() ?? new Lunch();
                 if (lnch != null)
                 {
                     User thisUsr = _context.uzivatele.Where(x => x.osobni_cislo == usr).FirstOrDefault() ?? new User();
-                    Choice choice = _context.vybery.Where(x => x.obedId == lnch && x.cislo_uzivatele == thisUsr).FirstOrDefault() ?? new Choice();
+                    Choice choice = _context.vybery.Where(x => x.obedId == lnch && x.cislo_uzivatele == thisUsr && x.vydejni_misto.cislo_VM == vm).FirstOrDefault() ?? new Choice();
                     if (choice != null && choice.pocet > 0)
                     {
                         choice.pocet--;
@@ -252,11 +279,18 @@ namespace Jopp_lunch.Pages.Choices
                 _context.vydejni_mista.Load();
                 _context.polevky.Load();
                 Choice = _context.vybery.ToList();
-                loadedDate = DateTime.Now;
-                if (_context.vydejni_mista != null) def_VM = _context.vydejni_mista.Where(x => x.cislo_VM == 1).FirstOrDefault();
+                if (!dt.IsNullOrEmpty())
+                {
+                    loadedDate = DateTime.Parse(dt);
+                }
+                else loadedDate = DateTime.Now;
+                if (_context.vydejni_mista != null)
+                {
+                    def_VM = _context.vydejni_mista.Where(x => x.cislo_VM == vm).FirstOrDefault();
+                }
                 LoadVybery(loadedDate);
             }
-            return Page();
+            return RedirectToPage("", new { dt = loadedDate.ToString("d"), cislo_VM = vm.ToString() });
         }
     }
 }

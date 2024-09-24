@@ -7,7 +7,7 @@
     <div class="row justify-content-left">
         <h1 style="font-weight: bold;" class="display-4">Týdenní menu - Balená strava</h1>
         @{var dt = new DateTime();}
-        @foreach (var sps in Model.Lunch.Where(sps => sps.datum_vydeje <= Model.lockdate).GroupBy(sp => sp.datum_vydeje).SelectMany(g=>g.ToList()).ToList())
+        @foreach (var sps in Model.Lunch.Where(sps => sps.datum_vydeje <= Model.lockdate).OrderBy(o => o.datum_vydeje).GroupBy(sp => sp.datum_vydeje).SelectMany(g => g.ToList()).ToList())
         {
             @if (dt.Date != @sps.datum_vydeje.Date)
             {         
@@ -41,7 +41,7 @@
             }
             dt = @sps.datum_vydeje;
         }
-        @foreach (var sps in Model.Lunch.Where(sps => sps.datum_vydeje > Model.lockdate).GroupBy(sp => sp.datum_vydeje).SelectMany(g => g.ToList()).ToList())
+        @foreach (var sps in Model.Lunch.Where(sps => sps.datum_vydeje > Model.lockdate).OrderBy(o => o.datum_vydeje).GroupBy(sp => sp.datum_vydeje).SelectMany(g => g.ToList()).ToList())
         {
             @if (dt.Date != @sps.datum_vydeje.Date)
             {
